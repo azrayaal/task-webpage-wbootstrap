@@ -42,31 +42,54 @@
       <!-- end of navbar -->
   </header>
   <main>
-    <div class="container my-5 p-5 rounded" style="background-color: #F4F3F3;">
-      <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+    <form method="post" action="blog">
+      <div class="container my-5 p-5 rounded" style="background-color: #F4F3F3;">
+        <div class="mb-3">
+          <label class="form-label">Project Name</label>
+          <input name="projectName" class="form-control" placeholder="project name">
+        </div>
+        <div class="mb-3">
+          <label for="exampleFormControlTextarea1" class="form-label">date</label>
+          <input type="date" name="startDate">
+          <input type="date" name="endDate">
+        </div>
+        <label for="content">Technologies:</label>
+          <div class="checkbox">
+            <label class="label-checkbox"
+              >Node Js
+              <input
+                type="checkbox"
+                class="input-technologies"
+                value="NodeJs"
+              />
+              <span class="checkmark"></span>
+            </label>
+            <label class="label-checkbox"
+              >React Js
+              <input
+                type="checkbox"
+                class="input-technologies"
+                value="ReactJs"
+              />
+              <span class="checkmark"></span>
+            </label>
+            <label class="label-checkbox"
+              >Golang
+              <input type="checkbox" class="input-technologies" value="Go" />
+              <span class="checkmark"></span>
+            </label>
+          </div>
+        <div class="mb-3">
+          <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+          <textarea class="form-control" rows="3" name="description"></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="formFile" class="form-label">Default file input example</label>
+          <input class="form-control" type="file" id="formFile">
+        </div>
+        <button type="submit">Submit</button>
       </div>
-      <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">date</label>
-        <input type="date">
-        <input type="date">
-      </div>
-      <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">Tehcnology</label>
-    <input type="checkbox">
-    <input type="checkbox">
-    <input type="checkbox">
-      </div>
-      <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-      </div>
-      <div class="mb-3">
-        <label for="formFile" class="form-label">Default file input example</label>
-        <input class="form-control" type="file" id="formFile">
-      </div>
-    </div>
+    </form>
   </main>
 
   <footer>
