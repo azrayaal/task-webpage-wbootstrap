@@ -1,0 +1,55 @@
+
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+    <form method="post" action="blog">
+      <div class="container my-5 p-5 rounded" style="background-color: #F4F3F3;">
+        <div class="mb-3">
+          <label class="form-label">Project Name</label>
+          <input name="projectName" class="form-control" placeholder="project name">
+        </div>
+        <div class="mb-3">
+          <label for="exampleFormControlTextarea1" class="form-label">date</label>
+          <input type="date" name="startDate">
+          <input type="date" name="endDate">
+        </div>
+        <label for="content">Technologies:</label>
+          <div class="checkbox">
+            <label class="label-checkbox"
+              >Node Js
+              <input
+                type="checkbox"
+                class="input-technologies"
+                value="NodeJs"
+              />
+              <span class="checkmark"></span>
+            </label>
+            <label class="label-checkbox"
+              >React Js
+              <input
+                type="checkbox"
+                class="input-technologies"
+                value="ReactJs"
+              />
+              <span class="checkmark"></span>
+            </label>
+            <label class="label-checkbox"
+              >Golang
+              <input type="checkbox" class="input-technologies" value="Go" />
+              <span class="checkmark"></span>
+            </label>
+          </div>
+        <div class="mb-3">
+          <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+          <textarea class="form-control" rows="3" name="description"></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="formFile" class="form-label">Default file input example</label>
+          <input class="form-control" type="file" id="formFile">
+        </div>
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+
+ 
+<%- include('partials/footer') %>

@@ -10,35 +10,29 @@ app.listen(port, () => {
 
 
 app.set('view engine', 'ejs')
-app.set('views', path.join(__dirname, 'assets/views'))
+app.set('views', path.join(__dirname, 'views'))
 // set serving static file
-app.use(express.static('assets'))
+app.use(express.static('views'))
 
 app.use(express.urlencoded({ extended: false }))
 
 
 
-const home = (req, res) => {
-  res.render('index')
-}
-const blog = (req, res) => {
-  res.render('blog')
-}
-const contact = (req, res) => {
-  res.render('contact')
-}
+// function router
+const home = (req, res) => {res.render('index', {title: 'Home'})}
+const blog = (req, res) => {res.render('blog',  {title: 'Blog'})}
+// const contact = (req, res) => {res.render('contact')}
 
-
+// router
 app.get('/', home)
 app.get('/blog', blog)
-app.get('/contact', contact)
+// app.get('/contact', contact)
 app.post('/blog', addContentBlog)
 
-
+// function blog
 function addContentBlog(req, res){
-let  {projectName, startDate, endDate, description} = req.body
-
-console.log("data: ", projectName, startDate, endDate, description)
-
+  let  {projectName, startDate, endDate, description} = req.body
+  console.log("data: ", projectName, startDate, endDate, description)
+  
   res.redirect('/blog')
 }
