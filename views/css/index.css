@@ -1,7 +1,7 @@
 body{
-    min-height: 100%;
+    /* min-height: 100%;
     margin: 0px;
-    /* background-color: lightgray; */
-    background-image: url("/img/ganyu-banner.png");
-    background-size: cover;
+    background-image: url("/views/img/ganyu-banner.png");
+    background-size: cover; */
+    background-color: red;
 }

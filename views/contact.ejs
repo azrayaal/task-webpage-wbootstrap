@@ -1,0 +1,44 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+
+<div class="container my-5 p-3 rounded shadow" style="background-color: #F4F3F3;">
+    <h3 class="text-center">Get In Touch</h1>
+    <form method="post" action="contact">
+        <!-- name -->
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Name</label>
+          <input type="text" class="form-control" name="name" placeholder="Name here...">
+        </div>
+        <!-- email -->
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input placeholder="Email here..." name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+        <!-- phone -->
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Phone</label>
+            <input type="number" class="form-control" name="phone" placeholder="Phone number here...">
+          </div>
+        <!-- subject -->
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Subject</label>
+            <select class="form-select" aria-label="Default select example" name="subject">
+            <option selected>Open this subject menu</option>
+            <option value="reactJs">ReactJs</option>
+            <option value="ExpressJs">ExpressJs</option>
+            <option value="nodeJs">NodeJs</option>
+          </select>
+        </div>  
+          <!-- message -->
+          <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Message</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="message"></textarea>
+          </div>
+        <button type="submit"  class="btn btn-primary">Submit</button>
+      </form>
+</div>
+
+
+<%- include('partials/footer') %>
