@@ -33,15 +33,20 @@
   <div class="blogshow bg-light" >
     <div class="container text-center">
       <div class="row">
+        <% blogData.forEach((i) => { %>
         <div class="col-md-4 col-12 my-5">
           <div class="card rounded shadow" style="background-color: #F4F3F3">
-            <img src="/img/elemental-resonance-woven-stone-card.png" class="card-img-top bg-danger" alt="..." style="max-height: 346px; min-height: 346px;">
+            <img src="<%= i.image %>" class="card-img-top bg-danger" alt="..." style="max-height: 346px; min-height: 346px;">
             <div class="card-body">
-              <h3 class="card-text text-start">Judul</p>
+              <h3 class="card-text text-start">
+                <a href="/blog-detail/<%= i.id %>" class="text-black" style="text-decoration: none;">
+                <%= i.title %>
+                </a>
+                </p>
               <p class="fs-6 fw-normal">duration</p>
-              <p class="fs-6 " style="text-align: justify;">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt, similique!</p>
+              <p class="fs-6 " style="text-align: justify;"><%= i.content %></p>
               <div class="footer-card d-flex justify-content-between">
-                <p class="fs-6 fw-normal">logo</p>
+                <p class="fs-6 fw-normal"><%= i.technologies %></p>
                 <p class="fs-6 fw-normal ">...ago</p>
               </div>
               <!-- benerin nanti -->
@@ -54,69 +59,22 @@
 
               <div class="d-grid gap1">
                 <div id="full" class="d-flex mb-1">
-                  <button type="button" class="btn btn-primary flex-fill me-1">Edit</button>
-                  <button type="button" class="btn btn-secondary flex-fill me-1">Delete</button>
+                  <button type="button" class="btn btn-primary flex-fill me-1">
+                    <a href="/blog-edit/<%= i.id %>" class="text-white  " style="text-decoration: none;">
+                      Edit
+                    </a>
+                  </button>
+                  <button  type="button" class="btn btn-secondary flex-fill me-1">
+                  <a href="/blog-delete/:id" class="text-white  " style="text-decoration: none;">
+                      Delete
+                    </a>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-md-4 col-12 my-5">
-          <div class="card rounded shadow" style="background-color: #F4F3F3">
-            <img src="/img/elemental-resonance-woven-stone-card.png" class="card-img-top bg-danger" alt="..." style="max-height: 346px; min-height: 346px;">
-            <div class="card-body">
-              <h3 class="card-text text-start">Judul</p>
-              <p class="fs-6 fw-normal">duration</p>
-              <p class="fs-6 " style="text-align: justify;">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt, similique!</p>
-              <div class="footer-card d-flex justify-content-between">
-                <p class="fs-6 fw-normal">logo</p>
-                <p class="fs-6 fw-normal ">...ago</p>
-              </div>
-              <!-- benerin nanti -->
-              <!-- <div class="footer-button-card bg-danger d-grid gap1">
-                <div class=" d-flex ">
-                  <button class="buttonstyling btn  flex-fill text-white px-4 py-1 mb-md-4 rounded-pill" style="background-color: #857ba1;" >Delete</button>
-                  <button class="buttonstyling btn flex-fill text-white px-4 py-1 mb-md-4 rounded-pill" style="background-color: #857ba1;" >Edit</button>
-                </div>
-              </div> -->
-
-              <div class="d-grid gap1">
-                <div id="full" class="d-flex mb-1">
-                  <button type="button" class="btn btn-primary flex-fill me-1">Edit</button>
-                  <button type="button" class="btn btn-secondary flex-fill me-1">Delete</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 col-12 my-5">
-          <div class="card rounded shadow" style="background-color: #F4F3F3">
-            <img src="/img/elemental-resonance-woven-stone-card.png" class="card-img-top bg-danger" alt="..." style="max-height: 346px; min-height: 346px;">
-            <div class="card-body">
-              <h3 class="card-text text-start">Judul</p>
-              <p class="fs-6 fw-normal">duration</p>
-              <p class="fs-6 " style="text-align: justify;">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt, similique!</p>
-              <div class="footer-card d-flex justify-content-between">
-                <p class="fs-6 fw-normal">logo</p>
-                <p class="fs-6 fw-normal ">...ago</p>
-              </div>
-              <!-- benerin nanti -->
-              <!-- <div class="footer-button-card bg-danger d-grid gap1">
-                <div class=" d-flex ">
-                  <button class="buttonstyling btn  flex-fill text-white px-4 py-1 mb-md-4 rounded-pill" style="background-color: #857ba1;" >Delete</button>
-                  <button class="buttonstyling btn flex-fill text-white px-4 py-1 mb-md-4 rounded-pill" style="background-color: #857ba1;" >Edit</button>
-                </div>
-              </div> -->
-
-              <div class="d-grid gap1">
-                <div id="full" class="d-flex mb-1">
-                  <button type="button" class="btn btn-primary flex-fill me-1">Edit</button>
-                  <button type="button" class="btn btn-secondary flex-fill me-1">Delete</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <% }); %>
       </div>
     </div>
   </div>

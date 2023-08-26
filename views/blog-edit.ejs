@@ -2,13 +2,14 @@
 <%- include('partials/header') %>
 <%- include('partials/navbar') %>
 
-    <form method="post" action="blog">
+    <form method="put" action="blog-edit">
       <div class="container my-5 p-md-5 " >
         <div class="p-4 p-md-5 rounded" style="background-color: #F4F3F3;">
+          <h1 class="text-center">Edit Blog <%= editBlog.title %> </h1>
           <!-- Name -->
           <div class="mb-3">
-            <label class="form-label">Blog Name</label>
-            <input name="title" class="form-control" placeholder="blog name" >
+            <label class="form-label">Project Name</label>
+            <input name="projectName" class="form-control" placeholder="<%= editBlog.title %>" >
           </div>
           <!-- Date -->
           <div class="mb-3 d-grid ">
@@ -43,7 +44,6 @@
                     class="input-technologies"
                     value="NodeJs"
                     style=" margin: 30px 0 30px 0;"
-                    name="technologies"
                   />
                   <span class="checkmark"></span>
                 </label>
@@ -53,13 +53,13 @@
                     type="checkbox"
                     class="input-technologies"
                     value="ReactJs"
-                    name="technologies"
+                    style=""
                   />
                   <span class="checkmark"></span>
                 </label>
                 <label class="label-checkbox"
                   >Golang
-                  <input type="checkbox" class="input-technologies" value="Go" name="technologies" style=" margin: 30px 0 30px 0;" />
+                  <input type="checkbox" class="input-technologies" value="Go" style=" margin: 30px 0 30px 0;" />
                   
                 </label>
               </div>
@@ -67,13 +67,14 @@
           <!-- content -->
           <div class="mb-3">
             <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-            <textarea class="form-control" rows="3" name="content"></textarea>
+            <textarea class="form-control" rows="3" name="content"><%= editBlog.content %>
+            </textarea>
           </div>
           <!-- Image -->
-          <!-- <div class="mb-3">
+          <div class="mb-3">
             <label for="formFile" class="form-label">Default file input example</label>
             <input class="form-control" type="file" id="formFile">
-          </div> -->
+          </div>
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>
