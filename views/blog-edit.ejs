@@ -1,18 +1,17 @@
 
 <%- include('partials/header') %>
 <%- include('partials/navbar') %>
-
-    <form method="put" action="blog-edit">
+    <form method="post" action="/blog-edit/<%= editBlog.id %>">
       <div class="container my-5 p-md-5 " >
         <div class="p-4 p-md-5 rounded" style="background-color: #F4F3F3;">
           <h1 class="text-center">Edit Blog <%= editBlog.title %> </h1>
           <!-- Name -->
           <div class="mb-3">
             <label class="form-label">Project Name</label>
-            <input name="projectName" class="form-control" placeholder="<%= editBlog.title %>" >
+            <input name="title" class="form-control" placeholder="<%= editBlog.title %>" >
           </div>
           <!-- Date -->
-          <div class="mb-3 d-grid ">
+          <!-- <div class="mb-3 d-grid ">
             <label class="form-label">Date</label>
             <div class="d-flex gap-0 gap-md-3">
               <input  class="form-control" name="startDate" type="date" style=" 
@@ -32,7 +31,7 @@
               margin-bottom: 16px;
                ">
             </div>
-            </div>
+            </div> -->
           <!-- Technologies -->
           <div class=" ">
             <label for="content">Technologies:</label>
@@ -44,6 +43,7 @@
                     class="input-technologies"
                     value="NodeJs"
                     style=" margin: 30px 0 30px 0;"
+                    name="technologies"
                   />
                   <span class="checkmark"></span>
                 </label>
@@ -53,13 +53,13 @@
                     type="checkbox"
                     class="input-technologies"
                     value="ReactJs"
-                    style=""
+                    name="technologies"
                   />
                   <span class="checkmark"></span>
                 </label>
                 <label class="label-checkbox"
                   >Golang
-                  <input type="checkbox" class="input-technologies" value="Go" style=" margin: 30px 0 30px 0;" />
+                  <input type="checkbox" class="input-technologies" value="Go" style=" margin: 30px 0 30px 0;" name="technologies" />
                   
                 </label>
               </div>
@@ -71,8 +71,11 @@
             </textarea>
           </div>
           <!-- Image -->
-          <div class="mb-3">
-            <label for="formFile" class="form-label">Default file input example</label>
+          <div class="mb-3" >
+            <label for="formFile" class="form-label">Image Before</label>
+            <div class="d-flex justify-content-md-start justify-content-center mb-2" style="height: 200px;">
+              <img src="<%= editBlog.image %>" alt="" >
+            </div>
             <input class="form-control" type="file" id="formFile">
           </div>
           <button type="submit" class="btn btn-primary">Submit</button>

@@ -13,7 +13,12 @@
             <p class=" fw-medium" style="text-align: justify;">
               <%= blog.content %></p>
               <%= blog.technologies %></p>
-             <button class="buttonstyling btn  text-white px-4 py-1 mb-md-4 rounded-pill" style="background-color: #857ba1;" >Contact</button>
+              <a href="/blog-edit/<%= blog.id %>" style="text-decoration: none;">
+                <button class="buttonstyling btn  text-white px-4 py-1 mb-md-4 rounded-pill" style="background-color: #857ba1;" >EDIT</button>
+              </a>
+              <a href="/blog-delete/<%= blog.id %>" style="text-decoration: none;">
+                <button class="buttonstyling btn  text-white px-4 py-1 mb-md-4 rounded-pill" style="background-color: #857ba1;" >DELETE</button>
+              </a>
           </div>
         </div>
       </div>
