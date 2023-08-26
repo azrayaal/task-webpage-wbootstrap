@@ -3,8 +3,8 @@ const express = require('express')
 const app = express()
 const port = 5000
 const path = require('path')
-const session = require('express-session')
-const flash = require('connect-flash');
+// const session = require('express-session')
+// const flash = require('connect-flash');
 
 // const sendmail = require('sendmail')
 
@@ -18,15 +18,15 @@ app.set('views', path.join(__dirname, 'views'))
 
 // set serving static file
 app.use(express.static('views'))
-app.use(flash());
+// app.use(flash());
 // Middleware
 app.use(express.urlencoded({ extended: false }))
-app.use(session({
-  secret: 'a',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true }
-}))
+// app.use(session({
+//   secret: 'a',
+//   resave: false,
+//   saveUninitialized: true,
+//   cookie: { secure: true }
+// }))
 
 
 
@@ -73,16 +73,12 @@ const blogEdit = (req, res) => {
       // editData.image = updateImage
 
       if(updateTitle === ''){
-        const failedMessage = req.flash('FAILED', 'Title must be filled!');
-        res.send({ failedMessage })
-        // req.flash('FAILED', 'Title must be filled!');
-        // res.redirect('/')
-      //  console.log('Title must be filled');
+        res.send('TITLE MUST BE FILLED!')
+       console.log('Title must be filled');
+       res.redirect('/')  
       } else if (updateContent === ''){
         res.send('CONTENT HARUS DI ISI')
-      } else if (updateTechnologies === ''){
-        res.send('TECHNOLOGIES HARUS DI PILIH')
-      }
+      } 
 
       res.redirect('/')
   } else {
