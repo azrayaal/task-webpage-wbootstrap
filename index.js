@@ -33,7 +33,7 @@ app.use(express.urlencoded({ extended: false }))
 
 // function router
 // Home
-const home = (req, res) => {res.render('index', {title: 'Home', blogData })}
+const home = (req, res) => {res.render('index', {title: 'Home', blogData } , console.log(blogData))}
 
 // Blog
 const blog = (req, res) => {res.render('blog',  {title: 'Blog'})}
@@ -45,8 +45,9 @@ const blogDetail = (req, res) => {
 const addContentBlog = (req, res)=>{
   let  {title, technologies ,content} = req.body
   // buat fungsi add ID auto add
+  
   let dataAddBlog = {
-  id:10, title, technologies ,content
+  id: 4, title, technologies ,content,  image: '/img/chef-mao-card.png'
   }
 
   blogData.push(dataAddBlog);
@@ -55,9 +56,13 @@ const addContentBlog = (req, res)=>{
 }
 const viewBlogEdit=(req, res)=>{
   const { id } = req.params 
-  res.render('blog-edit', {title: 'Edit Blog', editBlog: blogData[id]}, console.log(blogData[id]))
+
+  res.render('blog-edit', {title: 'Edit Blog', editBlog: blogData[id]}, console.log(blogData[id].id))
+ 
+
 }
 const blogEdit = (req, res) => { 
+
   const editBlogId = parseInt(req.params.id)
   const updateTitle = req.body.title
   const updateContent = req.body.content
