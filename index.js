@@ -18,9 +18,6 @@ app.use(express.static('views'))
 // Middleware
 app.use(express.urlencoded({ extended: false }))
 
-
-
-
 // function router
 // Home
 const home = (req, res) => {res.render('index', {title: 'Home', blogData }, console.log(blogData))}
@@ -41,7 +38,7 @@ const addContentBlog = (req, res)=>{
   // buat fungsi add ID auto add
   // let nextId = blogData.length ++
   
-  let nextId = 4
+  let nextId = 5
 
   let dataAddBlog = {
   id: nextId, 
@@ -60,13 +57,22 @@ const addContentBlog = (req, res)=>{
   res.redirect('/')
 }
 const viewBlogEdit=(req, res)=>{
+  // ambil based on index!
   const { id } = req.params 
 
-  res.render('blog-edit', {title: 'Edit Blog', editBlog: blogData[id]}, console.log(blogData[id].id))
+  const editBlog = blogData[id];
+
+  res.render('blog-edit', {title: 'Edit Blog', editBlog: editBlog}, 
+  
+  console.log(blogData.id))
 }
 const blogEdit = (req, res) => { 
+  // const {id} = req.params
+  // const id = req.params.id
+ 
 
   const editBlogId = parseInt(req.params.id)
+
   const updateTitle = req.body.title
   const updateContent = req.body.content
   const updateTechnologies = req.body.technologies
@@ -130,8 +136,8 @@ app.post('/contact', sendContact)
 // dummy data
 const blogData = [
   { id: 0, 
-    title: "Blog 1",
-    content: 'Blog ipsum dolor amet data 1',
+    title: "Blog 0",
+    content: 'Blog ipsum dolor amet data 0',
     technologies: ['NodeJs', 'ReactJs'],
     image: '/img/katheryne-card.png',
     startDate: '2023-08-28',
@@ -139,8 +145,8 @@ const blogData = [
     postAt: '2023-08-28T02:03:13.424Z'
   },
   { id: 1, 
-    title: "Blog 2",
-    content: 'data 2 Blog ipsum dolor amet data 2',
+    title: "Blog 1",
+    content: 'data 1 Blog ipsum dolor amet data 2',
     technologies: ['ReactJs', 'NodeJs', 'Go'],
     image: '/img/chef-mao-card.png',
     startDate: '2023-08-28',
@@ -148,19 +154,28 @@ const blogData = [
     postAt: '2023-08-28T02:03:13.424Z'
   },
   { id: 2, 
-    title: "Blog 3",
-    content: 'data 3 Blog ipsum dolor amet data 3',
-    technologies: ['NodeJs', 'ReactJs'],
+    title: "Blog 2",
+    content: 'data 2 Blog ipsum dolor amet data 3',
+    technologies: ['Go', 'NodeJs'],
     image: '/img/chang-the-ninth-card.png',
     startDate: '2023-08-28',
     endDate: '2023-08-31',
     postAt: '2023-08-28T02:03:13.424Z'
   },
   { id: 3, 
-    title: "Blog 4",
-    content: 'data 4 Blog ipsum dolor amet data 4',
+    title: "Blog 3",
+    content: 'data 3 Blog ipsum dolor amet data 4',
     technologies: ['ReactJs'],
     image: '/img/tian.png',
+    startDate: '2023-08-28',
+    endDate: '2023-08-31',
+    postAt: '2023-08-28T02:03:13.424Z'
+  },
+  { id: 4, 
+    title: "Blog 4",
+    content: 'data 4 Blog ipsum dolor amet data 4',
+    technologies: ['ReactJs', 'Go'],
+    image: '/img/chang-the-ninth-card.png',
     startDate: '2023-08-28',
     endDate: '2023-08-31',
     postAt: '2023-08-28T02:03:13.424Z'
