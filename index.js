@@ -43,14 +43,29 @@ const blogDetail = (req, res) => {
   {title: `Blog Detail ${id}`, blog: blogData[id]})
 }
 const addContentBlog = (req, res)=>{
-  let  {title, technologies ,content} = req.body
+  let  {title, 
+        technologies,
+        content,  
+        startDate,
+        endDate} = req.body
   // buat fungsi add ID auto add
+  // let nextId = blogData.length ++
   
-  let dataAddBlog = {
-  id: 4, title, technologies ,content,  image: '/img/chef-mao-card.png'
-  }
+  let nextId = 4
 
+  let dataAddBlog = {
+  id: nextId, 
+  title, 
+  technologies,
+  content,  
+  image: '/img/katheryne-card.png',
+  startDate,
+  endDate,
+  postAt: new Date()
+  }
+  // nextId++
   blogData.push(dataAddBlog);
+
   console.log("data addBlog: ", dataAddBlog)
   res.redirect('/')
 }
@@ -67,16 +82,19 @@ const blogEdit = (req, res) => {
   const updateTitle = req.body.title
   const updateContent = req.body.content
   const updateTechnologies = req.body.technologies
-  // const updateImage = req.body.image
+  const updateNewStartDate = req.body.startDate
+  const updateNewEndDate = req.body.endDate
 
-  const editData = blogData.find(editData => editData.id === editBlogId)
+  const editData = blogData.find(editData => editData.id === editBlogId)  
 
   if(editData){
       editData.title = updateTitle
       editData.content = updateContent
       editData.technologies = updateTechnologies
-      // editData.image = updateImage
-
+      editData.startDate = updateNewStartDate
+      editData.endDate = updateNewEndDate
+      editData.postAt = new Date()
+      
       if(updateTitle === ''){
         res.send('TITLE MUST BE FILLED!')
        console.log('Title must be filled');
@@ -89,6 +107,7 @@ const blogEdit = (req, res) => {
   } else {
     res.send('Failed to update new data')
   }
+
 }
 const blogDelete = (req, res) => { 
   const { id } = req.params 
@@ -122,25 +141,37 @@ const blogData = [
     title: "Blog 1",
     content: 'Blog ipsum dolor amet data 1',
     technologies: ['NodeJS', 'ExpressJS'],
-    image: '/img/katheryne-card.png'
+    image: '/img/katheryne-card.png',
+    startDate: '2023-08-28',
+    endDate: '2023-08-31',
+    postAt: '2023-08-28T02:03:13.424Z'
   },
   { id: 1, 
     title: "Blog 2",
     content: 'data 2 Blog ipsum dolor amet data 2',
     technologies: ['ExpressJS', 'NodeJS'],
-    image: '/img/chef-mao-card.png'
+    image: '/img/chef-mao-card.png',
+    startDate: '2023-08-28',
+    endDate: '2023-08-31',
+    postAt: '2023-08-28T02:03:13.424Z'
   },
   { id: 2, 
     title: "Blog 3",
     content: 'data 3 Blog ipsum dolor amet data 3',
     technologies: ['NodeJS', 'ExpressJS'],
-    image: '/img/chang-the-ninth-card.png'
+    image: '/img/chang-the-ninth-card.png',
+    startDate: '2023-08-28',
+    endDate: '2023-08-31',
+    postAt: '2023-08-28T02:03:13.424Z'
   },
   { id: 3, 
     title: "Blog 4",
     content: 'data 4 Blog ipsum dolor amet data 4',
     technologies: ['ExpressJS', 'NodeJS'],
-    image: '/img/tian.png'
+    image: '/img/tian.png',
+    startDate: '2023-08-28',
+    endDate: '2023-08-31',
+    postAt: '2023-08-28T02:03:13.424Z'
   },
 ];
 
