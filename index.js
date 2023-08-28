@@ -3,10 +3,7 @@ const express = require('express')
 const app = express()
 const port = 5000
 const path = require('path')
-// const session = require('express-session')
-// const flash = require('connect-flash');
 
-// const sendmail = require('sendmail')
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
@@ -18,22 +15,15 @@ app.set('views', path.join(__dirname, 'views'))
 
 // set serving static file
 app.use(express.static('views'))
-// app.use(flash());
 // Middleware
 app.use(express.urlencoded({ extended: false }))
-// app.use(session({
-//   secret: 'a',
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: { secure: true }
-// }))
 
 
 
 
 // function router
 // Home
-const home = (req, res) => {res.render('index', {title: 'Home', blogData } , console.log(blogData))}
+const home = (req, res) => {res.render('index', {title: 'Home', blogData }, console.log(blogData))}
 
 // Blog
 const blog = (req, res) => {res.render('blog',  {title: 'Blog'})}
@@ -73,8 +63,6 @@ const viewBlogEdit=(req, res)=>{
   const { id } = req.params 
 
   res.render('blog-edit', {title: 'Edit Blog', editBlog: blogData[id]}, console.log(blogData[id].id))
- 
-
 }
 const blogEdit = (req, res) => { 
 
@@ -135,12 +123,16 @@ app.post('/contact', sendContact)
 
 // /////////////////////////////////
 
+// const technologyIcons = {
+//   'ExpressJS': 'fab fa-node-js',
+//   'NodeJS': 'fab fa-node-js'
+// };
 // dummy data
 const blogData = [
   { id: 0, 
     title: "Blog 1",
     content: 'Blog ipsum dolor amet data 1',
-    technologies: ['NodeJS', 'ExpressJS'],
+    technologies: ['NodeJs', 'ReactJs'],
     image: '/img/katheryne-card.png',
     startDate: '2023-08-28',
     endDate: '2023-08-31',
@@ -149,7 +141,7 @@ const blogData = [
   { id: 1, 
     title: "Blog 2",
     content: 'data 2 Blog ipsum dolor amet data 2',
-    technologies: ['ExpressJS', 'NodeJS'],
+    technologies: ['ReactJs', 'NodeJs', 'Go'],
     image: '/img/chef-mao-card.png',
     startDate: '2023-08-28',
     endDate: '2023-08-31',
@@ -158,7 +150,7 @@ const blogData = [
   { id: 2, 
     title: "Blog 3",
     content: 'data 3 Blog ipsum dolor amet data 3',
-    technologies: ['NodeJS', 'ExpressJS'],
+    technologies: ['NodeJs', 'ReactJs'],
     image: '/img/chang-the-ninth-card.png',
     startDate: '2023-08-28',
     endDate: '2023-08-31',
@@ -167,7 +159,7 @@ const blogData = [
   { id: 3, 
     title: "Blog 4",
     content: 'data 4 Blog ipsum dolor amet data 4',
-    technologies: ['ExpressJS', 'NodeJS'],
+    technologies: ['ReactJs'],
     image: '/img/tian.png',
     startDate: '2023-08-28',
     endDate: '2023-08-31',
