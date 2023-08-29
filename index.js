@@ -28,6 +28,7 @@ const blogDetail = (req, res) => {
   const { id } = req.params 
   res.render('blog-detail', 
   {title: `Blog Detail ${id}`, blog: blogData[id]})
+  
 }
 const addContentBlog = (req, res)=>{
   let  {title, 
@@ -60,48 +61,58 @@ const viewBlogEdit=(req, res)=>{
   // ambil based on index!
   const { id } = req.params 
 
-  const editBlog = blogData[id];
-
-  res.render('blog-edit', {title: 'Edit Blog', editBlog: editBlog}, 
-  
+  // const editBlog = blogData[id].id;
+  console.log(blogData.id)
+  res.render('blog-edit', {title: 'Edit Blog', editBlog: blogData[id], id}, 
   console.log(blogData.id))
+  
 }
 const blogEdit = (req, res) => { 
   // const {id} = req.params
   // const id = req.params.id
- 
 
-  const editBlogId = parseInt(req.params.id)
+  // const editBlogId = parseInt(req.params.id)
 
-  const updateTitle = req.body.title
-  const updateContent = req.body.content
-  const updateTechnologies = req.body.technologies
-  const updateNewStartDate = req.body.startDate
-  const updateNewEndDate = req.body.endDate
+  // const updateTitle = req.body.title
+  // const updateContent = req.body.content
+  // const updateTechnologies = req.body.technologies
+  // const updateNewStartDate = req.body.startDate
+  // const updateNewEndDate = req.body.endDate
 
-  const editData = blogData.find(editData => editData.id === editBlogId)  
+  // const editData = blogData.find(editData => editData.id === editBlogId)  
 
-  if(editData){
-      editData.title = updateTitle
-      editData.content = updateContent
-      editData.technologies = updateTechnologies
-      editData.startDate = updateNewStartDate
-      editData.endDate = updateNewEndDate
-      editData.postAt = new Date()
+  // if(editData){
+  //     editData.title = updateTitle
+  //     editData.content = updateContent
+  //     editData.technologies = updateTechnologies
+  //     editData.startDate = updateNewStartDate
+  //     editData.endDate = updateNewEndDate
+  //     editData.postAt = new Date()
       
-      if(updateTitle === ''){
-        res.send('TITLE MUST BE FILLED!')
-       console.log('Title must be filled');
-       res.redirect('/')  
-      } else if (updateContent === ''){
-        res.send('CONTENT HARUS DI ISI')
-      } 
+  //     if(updateTitle === ''){
+  //       res.send('TITLE MUST BE FILLED!')
+  //      console.log('Title must be filled');
+  //      res.redirect('/')  
+  //     } else if (updateContent === ''){
+  //       res.send('CONTENT HARUS DI ISI')
+  //     } 
 
-      res.redirect('/')
-  } else {
-    res.send('Failed to update new data')
-  }
+  //     res.redirect('/')
+  // } else {
+  //   res.send('Failed to update new data')
+  // }
 
+ const {id} = req.params
+  console.log('tet');
+  const {title, content, startDate, endDate, technologies } = req.body
+  blogData[id].title = title
+  blogData[id].content = content
+  blogData[id].startDate = startDate
+  blogData[id].endDate = endDate
+  blogData[id].technologies = technologies
+  blogData[id].postAt = new Date()
+
+  res.redirect('/')
 }
 const blogDelete = (req, res) => { 
   const { id } = req.params 
