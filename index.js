@@ -11,10 +11,10 @@ app.listen(port, () => {
 
 // call ejs as view engine
 app.set('view engine', 'ejs')
-app.set('views', path.join(__dirname, 'views'))
+app.set('views', path.join(__dirname, 'src/views'))
 
 // set serving static file
-app.use(express.static('views'))
+app.use(express.static('src/assets'))
 // Middleware
 app.use(express.urlencoded({ extended: false }))
 
