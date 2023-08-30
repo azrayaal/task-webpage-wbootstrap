@@ -35,51 +35,44 @@
     <div class="container text-center">
       <div class="row">
         <% blogData.forEach((i) => { %>
-        <div class="col-md-4 col-12 my-5">
-          <div class="card rounded shadow" style="background-color: #F4F3F3">
-            <img src="<%= i.image %>" class="card-img-top bg-danger" alt="..." style="max-height: 346px; min-height: 346px;">
-            <div class="card-body">
-              <h3 class="card-text text-start">
-                <a href="/blog-detail/<%= i.id %>" class="text-black" style="text-decoration: none;">
-                <%= i.title %>
-                </a>
-                </p>
-              <p class="fs-6 fw-normal">duration</p>
-              <p class="fs-6 " style="text-align: justify;"><%= i.content %></p>
-              <div class="footer-card d-flex justify-content-between my-2">
-                <!-- <p class="fs-6 fw-normal"><%= i.technologies %></p> -->
-                <div class="technologies">
-               
-                  <% i.technologies.forEach((technology) => { %>
-                    <% if (technology === 'ReactJs') { %>
-                      <i class="fa-brands fa-react"></i>
-                    <% } else if (technology === 'NodeJs') { %>
-                      <i class="fa-brands fa-node-js"></i>
-                    <% } else if (technology === 'Go') { %>
-                      <i class="fa-brands fa-golang"></i>
-                    <% }  %>
-                  <% }); %>
+          <div class="col-md-4 col-12 my-5">
+            <div class="card rounded shadow" style="background-color: #F4F3F3">
+              <img src="<%= i.image %>" class="card-img-top bg-danger" alt="..." style="max-height: 346px; min-height: 346px;">
+              <div class="card-body">
+                <h3 class="card-text text-start">
+                  <a href="/blog-detail/<%= i.id %>" class="text-black" style="text-decoration: none;">
+                    <%= i.title %>
+                  </a>
+                </h3>
+                <p class="fs-6 fw-normal">duration</p>
+                <p class="fs-6 " style="text-align: justify;"><%= i.content %></p>
+                <div class="footer-card d-flex justify-content-between my-2">
+                  <div class="technologies">
+                    <% i.technologies.forEach((technology) => { %>
+                      <% if (technology === 'ReactJs') { %>
+                        <i class="fab fa-react"></i>
+                      <% } else if (technology === 'NodeJs') { %>
+                        <i class="fab fa-node-js"></i>
+                      <% } else if (technology === 'Go') { %>
+                        <i class="fab fa-golang"></i>
+                      <% }  %>
+                    <% }); %>
+                  </div>
+                  <p class="fs-6 fw-normal ">...ago</p>
                 </div>
-                <p class="fs-6 fw-normal ">...ago</p>
-              </div>
-
-              <div class="d-grid gap1">
-                <div id="full" class="d-flex mb-1">
-                  <button type="button" class="btn btn-primary flex-fill me-1">
-                    <a href="/blog-edit/<%= i.id %>" class="text-white  " style="text-decoration: none;">
-                      Edit
-                    </a>
-                  </button>
-                  <button  type="button" class="btn btn-secondary flex-fill me-1">
-                  <a href="/blog-delete/:id" class="text-white  " style="text-decoration: none;">
-                      Delete
-                    </a>
-                  </button>
+                <div class="d-grid gap1">
+                  <div id="full" class="d-flex mb-1">
+                    <button type="button" class="btn btn-primary flex-fill me-1">
+                      <a href="/blog-edit/<%= i.id %>" class="text-white" style="text-decoration: none;">Edit</a>
+                    </button>
+                    <button type="button" class="btn btn-secondary flex-fill me-1">
+                      <a href="/blog-delete/<%= i.id %>" class="text-white" style="text-decoration: none;">Delete</a>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
         <% }); %>
       </div>
     </div>
