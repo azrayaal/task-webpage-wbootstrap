@@ -27,20 +27,28 @@ app.use(express.urlencoded({ extended: false }))
 
 // function router
 // Home
+
 const home = async (req, res) => {
   try {
-    // const query = `SELECT * FROM blog`
-    const query = `SELECT * FROM blog;`
-    let obj = await sequelize.query(query, { type: QueryTypes.SELECT})
+    // const query = `SELECT * FROM blog;`
+    // let obj = await sequelize.query(query, { type: QueryTypes.SELECT})
+    
+    // console.log('objdb: ', obj);
+    // res.render('index', {title: 'Home', blogData: obj})
 
-    console.log('objdb: ', obj);
 
+    const data =  await sequelize.query(`SELECT * FROM blog`)
+
+    console.log('objdb: ', data);
+    res.render('index', {title: 'Home', blogData: data})
   } catch (error) {
-    console.log(error);
+    console.log('error bos', error);
   }
-  res.render('index', {title: 'Home', blogData }, 
-  // console.log(blogData)
-  )}
+
+  // res.render('index', {title: 'Home', blogData }, 
+  // console.log('BLOG DARI DAT: ', blogData)
+  // )
+}
 
 // Blog
 const blog = (req, res) => {res.render('blog',  {title: 'Blog'})}
@@ -50,44 +58,64 @@ const blogDetail = (req, res) => {
   {title: `Blog Detail ${id}`, blog: blogData[id]})
   
 }
-const addContentBlog = (req, res)=>{
-  let  {title, 
-        technologies,
-        content,  
-        startDate,
-        endDate} = req.body
-  // buat fungsi add ID auto add
-  // let nextId = blogData.length ++
-  
-  let nextId = 5
+const addContentBlog = async(req, res)=>{
+try {
+  let  {title, start_date, end_date, content, technologies} = req.body
+  const image = '/img/katheryne-card.png'
 
-  let dataAddBlog = {
-  id: nextId, 
-  title, 
-  technologies,
-  content,  
-  image: '/img/katheryne-card.png',
-  startDate,
-  endDate,
-  postAt: new Date()
-  }
-  // nextId++
-  blogData.push(dataAddBlog);
+await sequelize.query(`INSERT INTO blog(title, start_date, end_date, content, technologies, image) VALUES ('${title}', '${start_date}', '${end_date}', '${content}', ARRAY ['${technologies}'], '${image}')`)
 
-  console.log("data addBlog: ", dataAddBlog)
+  console.log("data addBlog: ", title, start_date, end_date, content, technologies)
   res.redirect('/')
+} catch (error) {
+  console.log("ERROR BOS: ", error);
 }
-const viewBlogEdit=(req, res)=>{
-  // ambil based on index!
-  const { id } = req.params 
+  // let  {title, 
+  //       technologies,
+  //       content,  
+  //       startDate,
+  //       endDate} = req.body
+  // // buat fungsi add ID auto add
+  // // let nextId = blogData.length ++
+  
+  // let nextId = 1
 
-  // const editBlog = blogData[id].id;
-  console.log(blogData.id)
-  res.render('blog-edit', {title: 'Edit Blog', editBlog: blogData[id], id}, 
-  console.log(blogData.id))
+  // let dataAddBlog = {
+  // id: nextId, 
+  // title, 
+  // technologies,
+  // content,  
+  // image: '/img/katheryne-card.png',
+  // startDate,
+  // endDate,
+  // postAt: new Date()
+  // }
+
+  // // nextId++
+  // blogData.push(dataAddBlog);
+
+  // console.log("data addBlog: ", dataAddBlog)
+  // res.redirect('/')
+}
+const viewBlogEdit= async(req, res)=>{
+try {
+  const {id} = req.params
+
+  await sequelize.query(`SELECT * FROM blog WHERE id=${id}`)
+} catch (error) {
+  console.log('error bos: ', error);
+}
+
+  // // ambil based on index!
+  // const { id } = req.params 
+  // // const editBlog = blogData[id].id;
+  // console.log(blogData.id)
+
+  // res.render('blog-edit', {title: 'Edit Blog', editBlog: blogData[id], id}, 
+  // console.log(blogData.id))
   
 }
-const blogEdit = (req, res) => { 
+const blogEdit = async(req, res) => { 
   // const {id} = req.params
   // const id = req.params.id
 
@@ -122,22 +150,42 @@ const blogEdit = (req, res) => {
   //   res.send('Failed to update new data')
   // }
 
- const {id} = req.params
-  console.log('tet');
-  const {title, content, startDate, endDate, technologies } = req.body
-  blogData[id].title = title
-  blogData[id].content = content
-  blogData[id].startDate = startDate
-  blogData[id].endDate = endDate
-  blogData[id].technologies = technologies
-  blogData[id].postAt = new Date()
+//  const {id} = req.params
+//   console.log('tet');
+//   const {title, content, startDate, endDate, technologies } = req.body
+//   blogData[id].title = title
+//   blogData[id].content = content
+//   blogData[id].startDate = startDate
+//   blogData[id].endDate = endDate
+//   blogData[id].technologies = technologies
+//   blogData[id].postAt = new Date()
 
-  res.redirect('/')
+//   res.redirect('/')
+
+try {
+  const {id} = req.params
+
+  let{
+    title, start_date, end_date, content, technologies
+  } = req.body
+
+  await sequelize.query(`UPDATE blog SET (title='${title}', start_date='${start_date}, end_date='${end_date}', content='${content}') WHERE id=${id}`)
+  console.log('data update: ', title, start_date, end_date, content, technologies);
+  } catch (error) {
 }
-const blogDelete = (req, res) => { 
+}
+
+const blogDelete = async(req, res) => { 
+try {
   const { id } = req.params 
-  blogData.splice(id, 1)
-  res.redirect('/')
+  // console.log('id', id);
+  await sequelize.query(`DELETE FROM blog WHERE id = ${id}`)
+  
+  // blogData.splice(id, 1)
+      res.redirect('/')
+    } catch (error) {
+      console.log('error: ', error);
+    }
 }
 
 // Contact
@@ -175,45 +223,45 @@ const blogData = [
     endDate: '2023-08-31',
     postAt: '2023-08-28T02:03:13.424Z'
   },
-  { id: 1, 
-    title: "Blog 1",
-    content: 'data 1 Blog ipsum dolor amet data 2',
-    technologies: ['ReactJs', 'NodeJs', 'Go'],
-    image: '/img/chef-mao-card.png',
-    startDate: '2023-08-28',
-    endDate: '2023-08-31',
-    postAt: '2023-08-28T02:03:13.424Z'
-  },
-  { id: 2, 
-    title: "Blog 2",
-    content: 'data 2 Blog ipsum dolor amet data 3',
-    technologies: ['Go', 'NodeJs'],
-    image: '/img/chang-the-ninth-card.png',
-    startDate: '2023-08-28',
-    endDate: '2023-08-31',
-    postAt: '2023-08-28T02:03:13.424Z'
-  },
-  { id: 3, 
-    title: "Blog 3",
-    content: 'data 3 Blog ipsum dolor amet data 4',
-    technologies: ['ReactJs'],
-    image: '/img/tian.png',
-    startDate: '2023-08-28',
-    endDate: '2023-08-31',
-    postAt: '2023-08-28T02:03:13.424Z'
-  },
-  { id: 4, 
-    title: "Blog 4",
-    content: 'data 4 Blog ipsum dolor amet data 4',
-    technologies: ['ReactJs', 'Go'],
-    image: '/img/chang-the-ninth-card.png',
-    startDate: '2023-08-28',
-    endDate: '2023-08-31',
-    postAt: '2023-08-28T02:03:13.424Z'
-  },
+  // { id: 1, 
+  //   title: "Blog 1",
+  //   content: 'data 1 Blog ipsum dolor amet data 2',
+  //   technologies: ['ReactJs', 'NodeJs', 'Go'],
+  //   image: '/img/chef-mao-card.png',
+  //   startDate: '2023-08-28',
+  //   endDate: '2023-08-31',
+  //   postAt: '2023-08-28T02:03:13.424Z'
+  // },
+  // { id: 2, 
+  //   title: "Blog 2",
+  //   content: 'data 2 Blog ipsum dolor amet data 3',
+  //   technologies: ['Go', 'NodeJs'],
+  //   image: '/img/chang-the-ninth-card.png',
+  //   startDate: '2023-08-28',
+  //   endDate: '2023-08-31',
+  //   postAt: '2023-08-28T02:03:13.424Z'
+  // },
+  // { id: 3, 
+  //   title: "Blog 3",
+  //   content: 'data 3 Blog ipsum dolor amet data 4',
+  //   technologies: ['ReactJs'],
+  //   image: '/img/tian.png',
+  //   startDate: '2023-08-28',
+  //   endDate: '2023-08-31',
+  //   postAt: '2023-08-28T02:03:13.424Z'
+  // },
+  // { id: 4, 
+  //   title: "Blog 4",
+  //   content: 'data 4 Blog ipsum dolor amet data 4',
+  //   technologies: ['ReactJs', 'Go'],
+  //   image: '/img/chang-the-ninth-card.png',
+  //   startDate: '2023-08-28',
+  //   endDate: '2023-08-31',
+  //   postAt: '2023-08-28T02:03:13.424Z'
+  // },
 ];
-
-
+// TECH
+// array satu ga masuk, tapi dua masuk
 
 
 
