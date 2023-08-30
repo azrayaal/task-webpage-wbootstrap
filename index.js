@@ -1,5 +1,6 @@
 
 const express = require('express')
+// const { Sequelize } = require('sequelize');
 const app = express()
 const port = 5000
 const path = require('path')
@@ -8,6 +9,12 @@ const path = require('path')
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+// sequelize setup
+const config = require('./src/config/config.json')
+const { Sequelize, QueryTypes } = require('sequelize')
+const sequelize = new Sequelize(config.development)
+
 
 // call ejs as view engine
 app.set('view engine', 'ejs')
@@ -20,7 +27,20 @@ app.use(express.urlencoded({ extended: false }))
 
 // function router
 // Home
-const home = (req, res) => {res.render('index', {title: 'Home', blogData }, console.log(blogData))}
+const home = async (req, res) => {
+  try {
+    // const query = `SELECT * FROM blog`
+    const query = `SELECT * FROM blog;`
+    let obj = await sequelize.query(query, { type: QueryTypes.SELECT})
+
+    console.log('objdb: ', obj);
+
+  } catch (error) {
+    console.log(error);
+  }
+  res.render('index', {title: 'Home', blogData }, 
+  // console.log(blogData)
+  )}
 
 // Blog
 const blog = (req, res) => {res.render('blog',  {title: 'Blog'})}
