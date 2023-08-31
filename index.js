@@ -13,6 +13,8 @@ app.listen(port, () => {
 // sequelize setup
 const config = require('./src/config/config.json')
 const { Sequelize, QueryTypes } = require('sequelize')
+const { title } = require('process')
+// const { SELECT } = require('sequelize/types/query-types')
 const sequelize = new Sequelize(config.development)
 
 
@@ -42,13 +44,41 @@ const home = async (req, res) => {
   }
 }
 
+
+
 // Blog
 const blog = (req, res) => {res.render('blog',  {title: 'Blog'})}
-const blogDetail = (req, res) => { 
-  const { id } = req.params 
-  res.render('blog-detail', 
-  {title: `Blog Detail ${id}`, blog: blogData[id]})
-  
+// async function blogDetail(req, res) {
+//   try {
+//     const {id} = req.params
+//     const query = `SELECT * FROM blog WHERE id =${id};`
+//     let obj = await sequelize.query(query, { type: QueryTypes.SELECT})
+
+//     const data = obj.map(res => ({
+//       ...res,
+//     }))
+// console.log("data??: ", data);
+//     res.render('blog-detail', { title: 'Blog-detail', blog: data[0] })
+//   } catch (error) {
+//     console.log(error)
+//   } 
+// }
+const blogDetail = async(req, res) => { 
+  try {
+    const {id} = req.params
+    const query = (`SELECT * FROM blog WHERE id =${id}`)
+    const obj = await sequelize.query(query, {type: QueryTypes.SELECT})
+
+    const data = obj.map((item)=>({
+      ...item
+    }))
+    
+     console.log('data obj detail: ', data);
+    res.render('blog-detail', {title: 'Detail Blog', blog: data[0]})
+   
+  } catch (error) {
+    console.log("error from blog-detail: ", error);
+  }
 }
 const addContentBlog = async(req, res)=>{
 try {
@@ -63,21 +93,21 @@ try {
   console.log("ERROR BOS: ", error);
 }
 }
-const viewBlogEdit= async(req, res)=>{
-try {
-  const {id} = req.params
-  const query = `SELECT * FROM blog WHERE id =${id};`
-  let obj = await sequelize.query(query, { type: QueryTypes.SELECT})
+const viewBlogEdit = async(req, res)=>{
+  try {
+    const {id} = req.params
+    const query = `SELECT * FROM blog WHERE id =${id};`
+    let obj = await sequelize.query(query, { type: QueryTypes.SELECT})
 
-  const data = obj.map((item)=>({
-    ...item
-  }))
-  
-  console.log('objdb EDIT: ', obj);
-  res.render('blog-edit', {title: 'edit page', editBlog: data[0]})
-} catch (error) {
-  console.log('error bos: ', error);
-}
+    const data = obj.map((item)=>({
+      ...item
+    }))
+    
+    console.log('objdb detail: ', obj);
+    res.render('blog-edit', {title: 'edit page', editBlog: data[0]})
+  } catch (error) { 
+    console.log('error bos: ', error);
+  }
   
 }
 const blogEdit = async(req, res) => { 
