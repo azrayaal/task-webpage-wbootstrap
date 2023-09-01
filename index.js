@@ -1,9 +1,11 @@
 
 const express = require('express')
-// const { Sequelize } = require('sequelize');
 const app = express()
 const port = 5000
 const path = require('path')
+const bcrypt = require('bcrypt')
+const flash = require('express-flash')
+const session = require('express-session')
 
 
 app.listen(port, () => {
@@ -13,9 +15,24 @@ app.listen(port, () => {
 // sequelize setup
 const config = require('./src/config/config.json')
 const { Sequelize, QueryTypes } = require('sequelize')
-const { title } = require('process')
-// const { SELECT } = require('sequelize/types/query-types')
 const sequelize = new Sequelize(config.development)
+
+// setup flash
+app.use(flash())
+
+// setup session
+app.use(session({
+  cookie:{
+    httpOnly: true, 
+    secure: false,
+    maxAge: 1000 * 60 * 60 * 2
+  },
+  store: new session.MemoryStore(),
+  saveUninitialized: true,
+  resave: false,
+  secret: 'secretValue'
+}))
+
 
 
 // call ejs as view engine
@@ -24,6 +41,7 @@ app.set('views', path.join(__dirname, 'src/views'))
 
 // set serving static file
 app.use(express.static('src/assets'))
+app.use(express.static('src/uploads'))
 // Middleware
 app.use(express.urlencoded({ extended: false }))
 
@@ -32,37 +50,95 @@ app.use(express.urlencoded({ extended: false }))
 // Home
 const home = async (req, res) => {
   try {
-
     const query = `SELECT * FROM blog;`
-    let obj = await sequelize.query(query, { type: QueryTypes.SELECT})
+    let data = await sequelize.query(query, { type: QueryTypes.SELECT})
     
-    console.log('objdb: ', obj);
-    res.render('index', {title: 'Home', blogData: obj})
+    // console.log('home data: ', obj);
+    
+    res.render('index', 
+    {
+    title: 'Home', 
+    blogData: data, 
+    isLogin: req.session.isLogin,
+    user: req.session.user
+    
+    // user: req.session.user
+    })
+    console.log('==========================================');
+    console.log('isLogin at homepage:', req.session.isLogin, req.session.user);
+    console.log('==========================================');
 
   } catch (error) {
     console.log('error bos', error);
   }
 }
+// register
+const viewRegister = (req, res) =>{
+  res.render('register', {title: 'Register Page'})
+}
+const register = async(req, res) => {
+  try {
+    const {name, email, password} = req.body
+    const saltRound = 10
 
+    await bcrypt.hash(password, saltRound, (err, hashPassword)=>{
+      const query = `INSERT INTO users (name, email, password) VALUES ('${name}', '${email}', '${hashPassword}')`
+      sequelize.query(query)
+    })
+    res.redirect('/')
+    console.log('data from register: ', dataHash);
+  } catch (error) {
+    console.log('error from register page: ', error);
+  }
+}
+// login
+const logOut = (req, res) =>{
+  req.session.destroy()
+  res.redirect('/')
+}
+const viewLogin = (req, res) =>{
+  res.render('login', {title: 'Login Page'})
+}
+const login = async(req, res)=>{
+  try {
+    const {email, password} = req.body
+    const query = `SELECT * FROM users WHERE email = '${email}'`
 
+    const dataUsers = await sequelize.query(query, {type: QueryTypes.SELECT})
+
+    console.log("data objek: ", dataUsers[0].password);
+
+    if(!dataUsers.length) {
+      req.flash = ('danger', 'user has not been registered')
+    }
+
+    await bcrypt.compare(password, dataUsers[0].password, (err, result)=>{
+      if(!result){
+        req.flash('danger', 'password wrong')
+        console.log('==========================================');
+        console.log('FAILED TO LOGIN: ', result);
+        console.log('==========================================');
+        return res.redirect('/login')
+      } else {
+        const isLogin = req.session.isLogin = true
+        // req.session.isLogin = true
+        req.session.user = dataUsers[0].name
+        isLogin
+        req.flash('succes', 'login berhasil')
+        console.log('==========================================');
+        console.log('BERHASIL LOGIN: ', isLogin, dataUsers[0].name);
+        console.log('==========================================');
+        res.redirect('/')
+      }
+    })
+    console.log('data from login page: ', dataUsers);
+  } catch (error) {
+    console.log('error from login page: ', error);
+  }
+}
 
 // Blog
 const blog = (req, res) => {res.render('blog',  {title: 'Blog'})}
-// async function blogDetail(req, res) {
-//   try {
-//     const {id} = req.params
-//     const query = `SELECT * FROM blog WHERE id =${id};`
-//     let obj = await sequelize.query(query, { type: QueryTypes.SELECT})
-
-//     const data = obj.map(res => ({
-//       ...res,
-//     }))
-// console.log("data??: ", data);
-//     res.render('blog-detail', { title: 'Blog-detail', blog: data[0] })
-//   } catch (error) {
-//     console.log(error)
-//   } 
-// }
 const blogDetail = async(req, res) => { 
   try {
     const {id} = req.params
@@ -81,17 +157,17 @@ const blogDetail = async(req, res) => {
   }
 }
 const addContentBlog = async(req, res)=>{
-try {
-  let  {title, start_date, end_date, content, technologies} = req.body
-  const image = '/img/katheryne-card.png'
+  try {
+    let  {title, start_date, end_date, content, technologies} = req.body
+    const image = '/img/katheryne-card.png'
 
-  await sequelize.query(`INSERT INTO blog(title, start_date, end_date, content, technologies, image) VALUES ('${title}', '${start_date}', '${end_date}', '${content}', ARRAY ['${technologies}'], '${image}')`)
+    await sequelize.query(`INSERT INTO blog(title, start_date, end_date, content, technologies, image) VALUES ('${title}', '${start_date}', '${end_date}', '${content}', ARRAY ['${technologies}'], '${image}')`)
 
-  console.log("data addBlog: ", title, start_date, end_date, content, technologies)
-  res.redirect('/')
-} catch (error) {
-  console.log("ERROR BOS: ", error);
-}
+    console.log("data addBlog: ", title, start_date, end_date, content, technologies)
+    res.redirect('/')
+  } catch (error) {
+    console.log("ERROR BOS: ", error);
+  }
 }
 const viewBlogEdit = async(req, res)=>{
   try {
@@ -133,13 +209,19 @@ try {
       console.log('error: ', error);
     }
 }
-
 // Contact
 const contact = (req, res) => {res.render('contact', {title: 'Contact'})}
 
 //////////// router
 // home
 app.get('/', home)
+app.get('/logout', logOut)
+// register
+app.get('/register', viewRegister)
+app.post('/register', register)
+// login
+app.get('/login', viewLogin)
+app.post('/login', login)
 // blog
 app.get('/blog', blog)
 app.post('/blog', addContentBlog)
