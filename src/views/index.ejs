@@ -33,6 +33,7 @@
 
   <!-- card project -->
   <div class="blogshow bg-light" >
+   
     <h1 class=" text-center">My Blog</h1>
     <div class="container text-center">
       <div class="row">
@@ -46,10 +47,20 @@
                     <%= i.title %>
                   </a>
                 </h3>
-                <p class="fs-6 fw-normal">duration</p>
+                <p class="fs-6 fw-normal text-end">Duration: <%= i.duration %> days</p>
                 <p class="fs-6 " style="text-align: justify;"><%= i.content %></p>
                 <div class="footer-card d-flex justify-content-between my-2">
-                <%= i.technologies %>
+                  <div class="technologies">
+                    <% i.technologies.forEach((technology) => { %>
+                      <% if (technology === 'ReactJs') { %>
+                        <i class="fab fa-react"></i>
+                      <% } else if (technology === 'NodeJs') { %>
+                        <i class="fab fa-node-js"></i>
+                      <% } else if (technology === 'Go') { %>
+                        <i class="fab fa-golang"></i>
+                      <% }  %>
+                    <% }); %>
+                  </div>
                   <p class="fs-6 fw-normal ">...ago</p>
                 </div>
                 <div class="d-grid gap1">

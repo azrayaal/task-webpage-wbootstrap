@@ -177,7 +177,14 @@ async function addContentBlog(req, res){
   const {title, content, technologies, start_date, end_date} = req.body
   const image = req.file.filename
 
-  await sequelize.query(`INSERT INTO blogs (title, content, technologies, start_date, end_date, image, "createdAt", "updatedAt") VALUES ('${title}', '${content}', '{${technologies}}', '${start_date}', '${end_date}', '${image}', NOW(), NOW())`)
+  const date1 = new Date(start_date);
+  const date2 = new Date(end_date);
+  const time = date2 - date1;
+  const days = Math.ceil(time / (1000 * 60 * 60 * 24));
+  let duration = days;
+
+
+  await sequelize.query(`INSERT INTO blogs (title, content, technologies, start_date, end_date, image, duration, "createdAt", "updatedAt") VALUES ('${title}', '${content}', '{${technologies}}', '${start_date}', '${end_date}', '${image}', '${duration}', NOW(), NOW())`)
   
   res.redirect('/')
   } catch (error) {
@@ -188,19 +195,23 @@ async function addContentBlog(req, res){
 }
 async function viewBlogDetail(req, res){
   try {
+    //////////////////////// DATE POST //////////////
+    /////////////////////////////////////////////////
+
+
    const {id} = req.params
-   const query = `SELECT * FROM blogs WHERE id =  ${id}`
+   const query = `SELECT * FROM blogs WHERE id= ${id}`
 
    const blog = await sequelize.query(query, {type: QueryTypes.SELECT})
 
-   const data = blog.map(item =>({
+   const data = blog.map((item) =>({
     ...item,
    }))
 
-   console.log('==========================================');
-   console.log('data detail page: ', data);
-   console.log(`SELECT * FROM blogs WHERE id = ${id}`);
-   console.log('==========================================');
+  //  console.log('==========================================');
+  //  console.log('data detail page: ', data);
+  //  console.log(`SELECT * FROM blogs WHERE id = ${id}`);
+  //  console.log('==========================================');
    
    res.render('blog-detail', {
     title: 'Blog Detail Page', 
@@ -208,7 +219,6 @@ async function viewBlogDetail(req, res){
     isLogin: req.session.isLogin,
     user: req.session.user
    })
-
   } catch (error) {
     console.log('==========================================');
     console.log('error from PROCESS Blog Detail Page: ', error);
@@ -248,7 +258,7 @@ async function blogEdit(req, res){
     const {id} = req.params
     const {title, start_date, end_date, technologies} = req.body
 
-    await sequelize.query(`UPDATE blogs SET title= '${title}', start_date= '${start_date}', end_date= '${end_date}' WHERE id= '${id}'`)
+    await sequelize.query(`UPDATE blogs SET title = '${title}', start_date = '${start_date}', end_date = '${end_date}', technologies = '{${technologies}}', WHERE id = '${id}'`)
 
     req.flash('success', 'Blog successfuly updated')
     res.redirect('/')

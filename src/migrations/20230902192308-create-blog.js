@@ -25,9 +25,12 @@ module.exports = {
         type: Sequelize.ARRAY(Sequelize.TEXT)
       },
       start_date: {
-        type: Sequelize.STRING
+        type: Sequelize.DATE
       },
       end_date: {
+        type: Sequelize.DATE
+      },
+      duration: {
         type: Sequelize.STRING
       },
       createdAt: {
