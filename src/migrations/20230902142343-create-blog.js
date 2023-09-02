@@ -22,10 +22,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       technologies: {
-        type: Sequelize.STRING
+        type: Sequelize.ARRAY(Sequelize.TEXT)
       },
       start_date: {
-        type: Sequelize.DATE
+        type: Sequelize.STRING
       },
       end_date: {
         type: Sequelize.STRING

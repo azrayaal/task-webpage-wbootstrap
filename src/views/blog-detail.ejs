@@ -10,21 +10,13 @@
           </div>
           <div class="col-md-8 col-12 p-3 p-md-5">
            <div class="d-flex justify-content-end">
-            <p>post:  <%= blog.postAt %></p>
+            <p>post:  <%= blog.createdAt %></p>
            </div>
             <h1><%= blog.title %></h1>
             <h5 class=" fs-4" style="text-align: justify;"> <%= blog.content %></h5>
             <div class="technologies">
               <%= blog.technologies %>
-              <% blog.technologies.forEach((technology) => { %>
-                <% if (technology === 'ReactJs') { %>
-                  <i class="fa-brands fa-react"></i>
-                <% } else if (technology === 'NodeJs') { %>
-                  <i class="fa-brands fa-node-js"></i>
-                <% } else if (technology === 'Go') { %>
-                  <i class="fa-brands fa-golang"></i>
-                <% }  %>
-              <% }); %>
+             
             </div>
               <hr>
               <div class="d-flex justify-content-start my-3">
@@ -33,7 +25,7 @@
                <p class="fw-bold ">
                  Start: 
                  <div class="fw-normal mx-2">
-                   <%= blog.startDate %>. -
+                   <%= blog.start_date %>. -
                  </div>
                </p>
         
@@ -41,7 +33,7 @@
                <p class="fw-bold ">
                 End: 
                 <div class="fw-normal mx-2">
-                  <%= blog.endDate %>.
+                  <%= blog.end_date %>.
                 </div>
               </p>
              <!-- </div> -->
