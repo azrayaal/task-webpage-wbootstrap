@@ -7,7 +7,7 @@
     <div class="container shadow my-5 text-center" style="background-color: #F4F3F3; border-radius: 25px; ">
       <div class="row" style="height: 100%;">
         <div class="col-md-8 col-12 text-start py-5 px-3 text-justify " >
-         <h1>Woven   <%= user %>  <%= isLogin %> </h1>
+         <h1>Woven    </h1>
         
          
          <p class=" fw-medium" style="text-align: justify;">
@@ -63,14 +63,16 @@
                   <p class="fs-6 fw-normal ">...ago</p>
                 </div>
                 <div class="d-grid gap1">
-                  <div id="full" class="d-flex mb-1">
-                    <button type="button" class="btn btn-primary flex-fill me-1">
-                      <a href="/blog-edit/<%= i.id %>" class="text-white" style="text-decoration: none;">Edit</a>
-                    </button>
-                    <button type="button" class="btn btn-secondary flex-fill me-1">
-                      <a href="/blog-delete/<%= i.id %>" class="text-white" style="text-decoration: none;">Delete</a>
-                    </button>
-                  </div>
+                  <% if(isLogin) { %>
+                    <div id="full" class="d-flex mb-1">
+                      <button type="button" class="btn btn-primary flex-fill me-1">
+                        <a href="/blog-edit/<%= i.id %>" class="text-white" style="text-decoration: none;">Edit</a>
+                      </button>
+                      <button type="button" class="btn btn-secondary flex-fill me-1">
+                        <a href="/blog-delete/<%= i.id %>" class="text-white" style="text-decoration: none;">Delete</a>
+                      </button>
+                    </div>
+                    <% } %>
                 </div>
               </div>
             </div>

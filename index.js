@@ -48,127 +48,124 @@ app.use(express.urlencoded({ extended: false }))
 // function router
 
 // Home
-const home = async (req, res) => {
-  try {
-    const query = `SELECT * FROM blog;`
-    let data = await sequelize.query(query, { type: QueryTypes.SELECT})
+// const home = async (req, res) => {
+//   try {
+//     const query = `SELECT * FROM blog;`
+//     let data = await sequelize.query(query, { type: QueryTypes.SELECT})
     
-    // console.log('home data: ', obj);
+//     // console.log('home data: ', obj);
     
-    res.render('index', 
-    {
-    title: 'Home', 
-    blogData: data, 
-    isLogin: req.session.isLogin,
-    user: req.session.user
+//     res.render('index', 
+//     {
+//     title: 'Home', 
+//     blogData: data, 
+//     isLogin: req.session.isLogin,
+//     user: req.session.user
     
-    // user: req.session.user
-    })
-    console.log('==========================================');
-    console.log('isLogin at homepage:', req.session.isLogin, req.session.user);
-    console.log('==========================================');
+//     // user: req.session.user
+//     })
+//     console.log('==========================================');
+//     console.log('isLogin at homepage a: ', req.session.isLogin, req.session.user);
+//     console.log('==========================================');
 
-  } catch (error) {
-    console.log('error bos', error);
-  }
-}
+//   } catch (error) {
+//     console.log('error bos', error);
+//   }
+// }
 // register
-const viewRegister = (req, res) =>{
-  res.render('register', {title: 'Register Page'})
-}
-const register = async(req, res) => {
-  try {
-    const {name, email, password} = req.body
-    const saltRound = 10
+// const viewRegister = (req, res) =>{
+//   res.render('register', {title: 'Register Page'})
+// }
+// const register = async(req, res) => {
+//   try {
+//     const {name, email, password} = req.body
+//     const saltRound = 10
 
-    await bcrypt.hash(password, saltRound, (err, hashPassword)=>{
-      const query = `INSERT INTO users (name, email, password) VALUES ('${name}', '${email}', '${hashPassword}')`
-      sequelize.query(query)
-    })
-    res.redirect('/')
-    console.log('data from register: ', dataHash);
-  } catch (error) {
-    console.log('error from register page: ', error);
-  }
-}
+//     await bcrypt.hash(password, saltRound, (err, hashPassword)=>{
+//       const query = `INSERT INTO users (name, email, password) VALUES ('${name}', '${email}', '${hashPassword}')`
+//       sequelize.query(query)
+//     })
+//     res.redirect('/')
+//     console.log('data from register: ', dataHash);
+//   } catch (error) {
+//     console.log('error from register page: ', error);
+//   }
+// }
 // login
-const logOut = (req, res) =>{
-  req.session.destroy()
-  res.redirect('/')
-}
-const viewLogin = (req, res) =>{
-  res.render('login', {title: 'Login Page'})
-}
-const login = async(req, res)=>{
-  try {
-    const {email, password} = req.body
-    const query = `SELECT * FROM users WHERE email = '${email}'`
+// const logOut = (req, res) =>{
+//   req.session.destroy()
+//   res.redirect('/')
+// }
+// const viewLogin = (req, res) =>{
+//   res.render('login', {title: 'Login Page'})
+// }
+// const login = async(req, res)=>{
+//   try {
+//     const {email, password} = req.body
+//     const query = `SELECT * FROM users WHERE email = '${email}'`
 
-    const dataUsers = await sequelize.query(query, {type: QueryTypes.SELECT})
+//     const dataUsers = await sequelize.query(query, {type: QueryTypes.SELECT})
 
-    console.log("data objek: ", dataUsers[0].password);
+//     console.log("data objek: ", dataUsers[0].password);
 
-    if(!dataUsers.length) {
-      req.flash = ('danger', 'user has not been registered')
-    }
+//     if(!dataUsers.length) {
+//       req.flash = ('danger', 'user has not been registered')
+//     }
 
-    await bcrypt.compare(password, dataUsers[0].password, (err, result)=>{
-      if(!result){
-        req.flash('danger', 'password wrong')
-        console.log('==========================================');
-        console.log('FAILED TO LOGIN: ', result);
-        console.log('==========================================');
-        return res.redirect('/login')
-      } else {
-        const isLogin = req.session.isLogin = true
-        // req.session.isLogin = true
-        req.session.user = dataUsers[0].name
-        isLogin
-        req.flash('succes', 'login berhasil')
-        console.log('==========================================');
-        console.log('BERHASIL LOGIN: ', isLogin, dataUsers[0].name);
-        console.log('==========================================');
-        res.redirect('/')
-      }
-    })
-    console.log('data from login page: ', dataUsers);
-  } catch (error) {
-    console.log('error from login page: ', error);
-  }
-}
+//     await bcrypt.compare(password, dataUsers[0].password, (err, result)=>{
+//       if(!result){
+//         req.flash('danger', 'password wrong')
+//         return res.redirect('/login')
+//       } else {
+//         const isLogin = req.session.isLogin = true
+//         // req.session.isLogin = true
+//         req.session.user = dataUsers[0].name
+//         isLogin
+//         req.flash('succes', 'login berhasil')
+//         console.log('==========================================');
+//         console.log('BERHASIL LOGIN: ', isLogin, dataUsers[0].name);
+//         console.log('==========================================');
+//         res.redirect('/')
+//       }
+//     })
+//     console.log('data from login page: ', dataUsers);
+//   } catch (error) {
+//     console.log('error from login page: ', error);
+//   }
+// }
 
 // Blog
-const blog = (req, res) => {res.render('blog',  {title: 'Blog'})}
-const blogDetail = async(req, res) => { 
-  try {
-    const {id} = req.params
-    const query = (`SELECT * FROM blog WHERE id =${id}`)
-    const obj = await sequelize.query(query, {type: QueryTypes.SELECT})
+// const blog = (req, res) => {res.render('blog',  {title: 'Blog'})}
+// const blogDetail = async(req, res) => { 
+//   try {
+//     const {id} = req.params
+//     const query = (`SELECT * FROM blog WHERE id =${id}`)
+//     const obj = await sequelize.query(query, {type: QueryTypes.SELECT})
 
-    const data = obj.map((item)=>({
-      ...item
-    }))
+//     const data = obj.map((item)=>({
+//       ...item
+//     }))
     
-     console.log('data obj detail: ', data);
-    res.render('blog-detail', {title: 'Detail Blog', blog: data[0]})
+//      console.log('data obj detail: ', data);
+//     res.render('blog-detail', {title: 'Detail Blog', blog: data[0]})
    
-  } catch (error) {
-    console.log("error from blog-detail: ", error);
-  }
-}
-const addContentBlog = async(req, res)=>{
-  try {
-    let  {title, start_date, end_date, content, technologies} = req.body
-    const image = '/img/katheryne-card.png'
+//   } catch (error) {
+//     console.log("error from blog-detail: ", error);
+//   }
+// }
+// const addContentBlog = async(req, res)=>{
+//   try {
+//     let  {title, start_date, end_date, content, technologies} = req.body
+//     const image = '/img/katheryne-card.png'
 
-    await sequelize.query(`INSERT INTO blog(title, start_date, end_date, content, technologies, image) VALUES ('${title}', '${start_date}', '${end_date}', '${content}', ARRAY ['${technologies}'], '${image}')`)
+//     await sequelize.query(`INSERT INTO blog(title, start_date, end_date, content, technologies, image) VALUES ('${title}', '${start_date}', '${end_date}', '${content}', ARRAY ['${technologies}'], '${image}')`)
 
-    console.log("data addBlog: ", title, start_date, end_date, content, technologies)
-    res.redirect('/')
-  } catch (error) {
-    console.log("ERROR BOS: ", error);
-  }
-}
+//     console.log("data addBlog: ", title, start_date, end_date, content, technologies)
+//     res.redirect('/')
+//   } catch (error) {
+//     console.log("ERROR BOS: ", error);
+//   }
+// }
 const viewBlogEdit = async(req, res)=>{
   try {
     const {id} = req.params
@@ -223,9 +220,9 @@ app.post('/register', register)
 app.get('/login', viewLogin)
 app.post('/login', login)
 // blog
-app.get('/blog', blog)
+app.get('/blog', viewFormBlog)
 app.post('/blog', addContentBlog)
-app.get('/blog-detail/:id', blogDetail)
+app.get('/blog-detail/:id', viewBlogDetail)
 app.get('/blog-edit/:id', viewBlogEdit)
 app.post('/blog-edit/:id', blogEdit)
 app.get('/blog-delete/:id', blogDelete)
@@ -338,3 +335,135 @@ function sendContact(req, res){
 }
 
 
+
+// //////////////////////////////////////////////////////
+///////////////  HOME  /////////////// 
+async function home(req, res){ 
+  try {
+    const query = `SELECT * FROM blog`
+    let dataBlogs = await sequelize.query(query, {type: QueryTypes.SELECT})
+
+    const isLogin = req.session.isLogin
+    const username = req.session.user
+
+    res.render('index', {
+      title: 'Home Page', 
+      blogData: dataBlogs,
+      isLogin: req.session.isLogin,
+      user: req.session.user
+    })
+    console.log('==========================================');
+    console.log('isLogin at homepage: ', isLogin, username);
+    console.log('==========================================');
+  } catch (error) {
+    console.log('==========================================');
+    console.log('error from HOME PAGE: ', error);
+    console.log('==========================================');
+  }
+}
+///////////////  REGISTER  ///////////////
+function viewRegister(req, res){
+  res.render('register', {title: 'Register Page' })
+}
+async function register(req, res){
+  try {
+    const {name, email, password} = req.body
+    const saltRound = 10
+
+    await bcrypt.hash(password, saltRound, (err, hassPassword)=>{
+      const query = `INSERT INTO users (name, email, password) VALUES ('${name}', '${email}', '${hassPassword}')`
+      sequelize.query(query)
+      req.flash('succes', 'Register is successful')
+    })
+    res.redirect('/login')
+ 
+  } catch (error) {
+    console.log('==========================================');
+    console.log('error from REGISTER PAGE: ', error);
+    console.log('==========================================');
+  }
+}
+///////////////  LOGIN  ///////////////
+function viewLogin(req, res){
+  res.render('login', {title: 'Login Page'})
+}
+async function login(req, res){
+  try {
+    const {email, password} = req.body
+    const query = `SELECT * FROM users WHERE email = '${email}'`
+
+    const dataUsers = await sequelize.query(query, {type: QueryTypes.SELECT})
+// cek email
+    if(!dataUsers.length){
+      req.flash('danger', 'Email has not been registered!')
+    }
+// cek password
+    await bcrypt.compare(password, dataUsers[0].password, (err, isMatch)=>{
+      if(!isMatch){
+        req.flash('danger', 'Sorry, your password is wrong')
+      } else {
+        const isLogin = req.session.isLogin = true
+        isLogin
+        // req.session.isLogin = true
+        const username = req.session.user = dataUsers[0].name
+        username
+        // req.session.user = dataUsers[0].name
+        req.flash('succes', 'Login successful')
+       
+        // console.log('==========================================');
+        // console.log('req.session.isLogin : ', isLogin, username);
+        // console.log('==========================================');
+        res.redirect('/')
+      }
+    })
+  } catch (error) {
+    console.log('==========================================');
+    console.log('error from LOGIN PAGE: ', error);
+    console.log('==========================================');
+  }
+}
+///////////////  BLOG  ///////////////
+function logOut(req, res){
+  req.session.destroy()
+  res.redirect('/login')
+}
+///////////////  BLOG  ///////////////
+function viewFormBlog(req, res){
+  res.render('blog', {title: 'Blog Page'})
+}
+async function addContentBlog(req, res){
+  try {
+  const {title, content, technologies, start_date, end_date} = req.body
+  const image = '/img/katheryne-card.png'
+
+  await sequelize.query(`INSERT INTO blog (title, content, technologies, start_date, end_date) VALUES ('${title}', '${content}', ARRAY ['${technologies}'], '${start_date}', '${end_date}', '${image})`)
+  
+  res.redirect('/')
+  } catch (error) {
+    console.log('==========================================');
+    console.log('error from PROCESS ADD CONTENT: ', error);
+    console.log('==========================================');
+  }
+}
+async function viewBlogDetail(req, res){
+  try {
+   const {id} = req.params
+   const query = `SELECT * FROM blog WHERE id = ${id}`
+
+   const blog = await sequelize.query(query, {type: QueryTypes.SELECT})
+
+   const data = blog.map(item =>({
+    ...item
+   }))
+
+   res.render('blog-detail', {
+    title: 'Blog Detail Page', 
+    blog: data[0]
+   })
+
+  } catch (error) {
+    console.log('==========================================');
+    console.log('error from PROCESS Blog Detail Page: ', error);
+    console.log('==========================================');
+  }
+}

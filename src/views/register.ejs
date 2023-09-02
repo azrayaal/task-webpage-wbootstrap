@@ -2,9 +2,12 @@
   <main>
     <div class="container bg-secondary">
         <div class="container p-4 bg-light my-5 rounded shadow">
-        <div class="text-center">
-            <h2>REGISTER</h2>
-        </div>
+          <div class="text-center">
+            <div class="d-flex justify-content-end">
+              <button type="submit" class="btn btn-success shadow "> <a class="nav-link fw-semibold" href="/"><i class="fa-solid fa-house"></i></a></button>
+            </div>
+            <h2>REGISTER PAGE</h2>
+          </div>
             <form method="post" action="/register">
                 <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Name</label>
@@ -16,17 +19,15 @@
                 <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                 </div>
                 <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <label for="exampleInputPassword1" class="form-label shadow">Password</label>
                 <input type="password" class="form-control" name="password" id="password"placeholder="Password here...">
+                <button type="button" id="showPasswordButton" class="btn btn-warning mt-2">Show Password</button>
                 </div>
-                <div class="mb-3 form-check">
+                <div class="d-flex justify-content-between ">
+                  <button type="submit" class="btn btn-primary shadow">Submit</button>
+                  <button type="submit" class="btn btn-danger shadow"> <a class="nav-link fw-semibold" href="/">Cancel</a></button>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" id="showPasswordButton" class="btn btn-primary">Show Password</button>
             </form>
-            <a href="/">
-                <button type="submit" class="btn btn-danger">Cancel</button>
-            </a>
         </div>
     </div>
   </main>
