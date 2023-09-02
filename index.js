@@ -76,18 +76,18 @@ async function home(req, res){
     const query = `SELECT * FROM blogs`
     let dataBlogs = await sequelize.query(query, {type: QueryTypes.SELECT})
 
-    const isLogin = req.session.isLogin
-    const username = req.session.user
+    // const isLogin = req.session.isLogin
+    // const username = req.session.user
+      res.render('index', {
+        title: 'Home Page', 
+        blogData: dataBlogs,
+        isLogin: req.session.isLogin,
+        user: req.session.user
+      })
 
-    res.render('index', {
-      title: 'Home Page', 
-      blogData: dataBlogs,
-      isLogin: req.session.isLogin,
-      user: req.session.user
-    })
-    console.log('==========================================');
-    console.log('isLogin at homepage: ', isLogin, username);
-    console.log('==========================================');
+    // console.log('==========================================');
+    // console.log('isLogin at homepage: ', isLogin, username);
+    // console.log('==========================================');
   } catch (error) {
     console.log('==========================================');
     console.log('error from HOME PAGE: ', error);
@@ -177,7 +177,7 @@ async function addContentBlog(req, res){
   const {title, content, technologies, start_date, end_date} = req.body
   const image = req.file.filename
 
-  await sequelize.query(`INSERT INTO blogs (title, content, technologies, start_date, end_date, image, "createdAt", "updatedAt") VALUES ('${title}', '${content}', '${technologies}', '${start_date}', '${end_date}', '${image}', NOW(), NOW())`)
+  await sequelize.query(`INSERT INTO blogs (title, content, technologies, start_date, end_date, image, "createdAt", "updatedAt") VALUES ('${title}', '${content}', '{${technologies}}', '${start_date}', '${end_date}', '${image}', NOW(), NOW())`)
   
   res.redirect('/')
   } catch (error) {
@@ -189,14 +189,19 @@ async function addContentBlog(req, res){
 async function viewBlogDetail(req, res){
   try {
    const {id} = req.params
-   const query = `SELECT * FROM blogs WHERE id = ${id}`
+   const query = `SELECT * FROM blogs WHERE id =  ${id}`
 
    const blog = await sequelize.query(query, {type: QueryTypes.SELECT})
 
    const data = blog.map(item =>({
-    ...item
+    ...item,
    }))
 
+   console.log('==========================================');
+   console.log('data detail page: ', data);
+   console.log(`SELECT * FROM blogs WHERE id = ${id}`);
+   console.log('==========================================');
+   
    res.render('blog-detail', {
     title: 'Blog Detail Page', 
     blog: data[0],
