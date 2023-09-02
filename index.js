@@ -6,6 +6,9 @@ const path = require('path')
 const bcrypt = require('bcrypt')
 const flash = require('express-flash')
 const session = require('express-session')
+const upload = require('./src/middlewares/uploadFileImage')
+// const multer  = require('multer')
+// const upload = multer({ dest: './src/uploads' })
 
 
 app.listen(port, () => {
@@ -57,7 +60,7 @@ app.get('/login', viewLogin)
 app.post('/login', login)
 // blog
 app.get('/blog', viewFormBlog)
-app.post('/blog', addContentBlog)
+app.post('/blog', upload.single('image'), addContentBlog)
 app.get('/blog-detail/:id', viewBlogDetail)
 app.get('/blog-edit/:id', viewBlogEdit)
 app.post('/blog-edit/:id', blogEdit)
@@ -70,7 +73,7 @@ app.post('/contact', sendContact)
 ///////////////  HOME  /////////////// 
 async function home(req, res){ 
   try {
-    const query = `SELECT * FROM blog`
+    const query = `SELECT * FROM blogs`
     let dataBlogs = await sequelize.query(query, {type: QueryTypes.SELECT})
 
     const isLogin = req.session.isLogin
@@ -101,7 +104,7 @@ async function register(req, res){
     const saltRound = 10
 
     await bcrypt.hash(password, saltRound, (err, hassPassword)=>{
-      const query = `INSERT INTO users (name, email, password) VALUES ('${name}', '${email}', '${hassPassword}')`
+      const query = `INSERT INTO users (name, email, password, "createdAt", "updatedAt") VALUES ('${name}', '${email}', '${hassPassword}', NOW(), NOW())`
       sequelize.query(query)
       req.flash('succes', 'Register is successful')
     })
@@ -120,7 +123,7 @@ function viewLogin(req, res){
 async function login(req, res){
   try {
     const {email, password} = req.body
-    const query = `SELECT * FROM users WHERE email = '${email}'`
+    const query = `SELECT * FROM Users WHERE email = '${email}'`
 
     const dataUsers = await sequelize.query(query, {type: QueryTypes.SELECT})
 // cek email
@@ -168,9 +171,9 @@ function viewFormBlog(req, res){
 async function addContentBlog(req, res){
   try {
   const {title, content, technologies, start_date, end_date} = req.body
-  const image = '/img/katheryne-card.png'
+  const image = req.file.filename
 
-  await sequelize.query(`INSERT INTO blog (title, content, technologies, start_date, end_date, image) VALUES ('${title}', '${content}', ARRAY ['${technologies}'], '${start_date}', '${end_date}', '${image}')`)
+  await sequelize.query(`INSERT INTO blogs (title, content, technologies, start_date, end_date, image, "createdAt", "updatedAt") VALUES ('${title}', '${content}', '${technologies}', '${start_date}', '${end_date}', '${image}', NOW(), NOW())`)
   
   res.redirect('/')
   } catch (error) {
@@ -182,7 +185,7 @@ async function addContentBlog(req, res){
 async function viewBlogDetail(req, res){
   try {
    const {id} = req.params
-   const query = `SELECT * FROM blog WHERE id = ${id}`
+   const query = `SELECT * FROM blogs WHERE id = ${id}`
 
    const blog = await sequelize.query(query, {type: QueryTypes.SELECT})
 
@@ -206,7 +209,7 @@ async function viewBlogDetail(req, res){
 async function viewBlogEdit(req, res){
   try {
     const {id} = req.params
-    const query = `SELECT * FROM blog WHERE id = ${id}`
+    const query = `SELECT * FROM blogs WHERE id = ${id}`
 
     const blog = await sequelize.query(query, {type: QueryTypes.SELECT})
 
@@ -232,7 +235,7 @@ async function blogEdit(req, res){
     const {id} = req.params
     const {title, start_date, end_date, technologies} = req.body
 
-    await sequelize.query(`UPDATE blog SET title= '${title}', start_date= '${start_date}', end_date= '${end_date}' WHERE id= '${id}'`)
+    await sequelize.query(`UPDATE blogs SET title= '${title}', start_date= '${start_date}', end_date= '${end_date}' WHERE id= '${id}'`)
 
     req.flash('success', 'Blog successfuly updated')
     res.redirect('/')
@@ -245,7 +248,7 @@ async function blogEdit(req, res){
 async function blogDelete(req, res){
   try {
     const {id} = req.params
-    await sequelize.query(`DELETE FROM blog WHERE id= ${id}`)
+    await sequelize.query(`DELETE FROM blogs WHERE id= ${id}`)
     req.flash('success', 'Blog succesfully removed')
     res.redirect('/')
   } catch (error) {

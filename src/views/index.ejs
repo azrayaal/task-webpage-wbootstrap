@@ -49,17 +49,7 @@
                 <p class="fs-6 fw-normal">duration</p>
                 <p class="fs-6 " style="text-align: justify;"><%= i.content %></p>
                 <div class="footer-card d-flex justify-content-between my-2">
-                  <div class="technologies">
-                    <% i.technologies.forEach((technology) => { %>
-                      <% if (technology === 'ReactJs') { %>
-                        <i class="fab fa-react"></i>
-                      <% } else if (technology === 'NodeJs') { %>
-                        <i class="fab fa-node-js"></i>
-                      <% } else if (technology === 'Go') { %>
-                        <i class="fab fa-golang"></i>
-                      <% }  %>
-                    <% }); %>
-                  </div>
+                <%= i.technologies %>
                   <p class="fs-6 fw-normal ">...ago</p>
                 </div>
                 <div class="d-grid gap1">

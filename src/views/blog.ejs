@@ -2,7 +2,7 @@
 <%- include('partials/header') %>
 <%- include('partials/navbar') %>
 
-    <form method="POST" action="blog">
+    <form method="post" action="/blog" enctype="multipart/form-data">
       <div class="container my-5 p-md-5 " >
         <div class="p-4 p-md-5 rounded" style="background-color: #F4F3F3;">
           <h1 class="text-center mb-3">Add blog</h1>
@@ -71,10 +71,10 @@
             <textarea class="form-control" rows="3" name="content"></textarea>
           </div>
           <!-- Image -->
-          <!-- <div class="mb-3">
-            <label for="formFile" class="form-label">Default file input example</label>
-            <input class="form-control" type="file" id="formFile">
-          </div> -->
+          <div class="mb-3">
+            <label for="formFile" class="form-label">Image</label>
+            <input class="form-control" type="file" name="image" id="formFile">
+          </div>
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>

@@ -1,7 +1,7 @@
 
 <%- include('partials/header') %>
 <%- include('partials/navbar') %>
-    <form method="post" action="/blog-edit/<%= editBlog.id %>">
+    <form method="post" action="/blog-edit/<%= editBlog.id %>" enctype="multipart/form-data">
       <div class="container my-5 p-md-5 " >
         <div class="p-4 p-md-5 rounded" style="background-color: #F4F3F3;">
           <h1 class="text-center">Edit Blog <%= editBlog.title %> </h1>
