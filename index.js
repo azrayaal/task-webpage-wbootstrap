@@ -155,18 +155,22 @@ async function login(req, res){
     console.log('==========================================');
   }
 }
-///////////////  BLOG  ///////////////
+///////////////  LOGOUT  ///////////////
 function logOut(req, res){
   req.session.destroy()
   res.redirect('/login')
 }
 ///////////////  BLOG  ///////////////
 function viewFormBlog(req, res){
-  res.render('blog', {
-    title: 'Blog Page',
-    isLogin: req.session.isLogin,
-    user: req.session.user
-  })
+  if(!req.session.isLogin){
+    res.redirect('/login')
+  } else {
+    res.render('blog', {
+      title: 'Blog Page',
+      isLogin: req.session.isLogin,
+      user: req.session.user
+    })
+  }
 }
 async function addContentBlog(req, res){
   try {
@@ -207,27 +211,31 @@ async function viewBlogDetail(req, res){
   }
 }
 async function viewBlogEdit(req, res){
-  try {
-    const {id} = req.params
-    const query = `SELECT * FROM blogs WHERE id = ${id}`
-
-    const blog = await sequelize.query(query, {type: QueryTypes.SELECT})
-
-    const data = blog.map((item)=>({
-      ...item
-    }))
-
-    res.render('blog-edit', {
-      title: 'Blog Edit', 
-      editBlog: data[0],
-      isLogin: req.session.isLogin,
-      user: req.session.user
-  })
-    
-  } catch (error) {
-    console.log('==========================================');
-    console.log('error from PROCESS Blog Edit Page: ', error);
-    console.log('==========================================');
+  if(!req.session.isLogin){
+    res.redirect('/login')
+  }else{
+    try {
+      const {id} = req.params
+      const query = `SELECT * FROM blogs WHERE id = ${id}`
+  
+      const blog = await sequelize.query(query, {type: QueryTypes.SELECT})
+  
+      const data = blog.map((item)=>({
+        ...item
+      }))
+  
+      res.render('blog-edit', {
+        title: 'Blog Edit', 
+        editBlog: data[0],
+        isLogin: req.session.isLogin,
+        user: req.session.user
+    })
+      
+    } catch (error) {
+      console.log('==========================================');
+      console.log('error from PROCESS Blog Edit Page: ', error);
+      console.log('==========================================');
+    }
   }
 }
 async function blogEdit(req, res){
