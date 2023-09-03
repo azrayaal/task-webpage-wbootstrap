@@ -37,6 +37,12 @@
     <h1 class=" text-center">My Blog</h1>
     <div class="container text-center">
       <div class="row">
+        <% if (user) {%>
+        <!-- <h1>TEST USER</h1>
+          <% } else { %>
+        <h1>TEST TANPA</h1>
+          <% } %> -->
+          
         <% blogData.forEach((i) => { %>
           <div class="col-md-4 col-12 my-5">
             <div class="card rounded shadow" style="background-color: #F4F3F3">
@@ -47,7 +53,7 @@
                     <%= i.title %>
                   </a>
                 </h3>
-                <p class="fs-6 fw-normal text-end">Duration: <%= i.duration %> days</p>
+                <p class="fs-6 fw-normal text-end">Duration: <%= i.durations %> days</p>
                 <p class="fs-6 " style="text-align: justify;"><%= i.content %></p>
                 <div class="footer-card d-flex justify-content-between my-2">
                   <div class="technologies">
@@ -73,8 +79,6 @@
                         <a href="/blog-delete/<%= i.id %>" class="text-white" style="text-decoration: none;">Delete</a>
                       </button>
                     </div>
-
-                  
                     <% } %>
                 </div>
               </div>

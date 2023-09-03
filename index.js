@@ -64,7 +64,7 @@ app.get('/blog', viewFormBlog)
 app.post('/blog', upload.single('image'), addContentBlog)
 app.get('/blog-detail/:id', viewBlogDetail)
 app.get('/blog-edit/:id', viewBlogEdit)
-app.post('/blog-edit/:id', blogEdit)
+app.post('/blog-edit/:id', upload.single('image'), blogEdit)
 app.get('/blog-delete/:id', blogDelete)
 // contact
 app.get('/contact', contact)
@@ -74,56 +74,25 @@ app.post('/contact', sendContact)
 ///////////////  HOME  /////////////// 
 async function home(req, res){ 
   try {
-    const query = `SELECT * FROM blogs`
+    const query = `SELECT * FROM projects`
     let dataBlogs = await sequelize.query(query, {type: QueryTypes.SELECT})
 
-
-    // function getDistanceTime(createpost) {
-    //   let timeNow = new Date();
-    //   let timePost = createpost;
-
-    //   let distanceTime = timeNow - timePost;
-    
-    //   let distanceDay = Math.floor(distanceTime / (1000 * 3600 * 24));
-    //   let distanceHour = Math.floor(distanceTime / (1000 * 60 * 60));
-    //   let distanceMinute = Math.floor(distanceTime / (1000 * 60));
-    //   let distanceSecond = Math.floor(distanceTime / 1000);
-    
-    //   if (
-    //     distanceDay ||
-    //     distanceHour ||
-    //     distanceMinute ||
-    //     distanceSecond == false
-    //   ) {
-    //     return `... Ago`;
-    //   } else if (distanceDay > 0) {
-    //     return `${distanceDay} days ago`;
-    //   } else if (distanceHour > 0) {
-    //     return `${distanceHour} hour ago`;
-    //   } else if (distanceMinute > 0) {
-    //     return `${distanceMinute} minute ago`;
-    //   } else if (distanceSecond > 0) {
-    //     return `${distanceSecond} second ago`;
-    //   }
-    // }
-    
-    // let timePost = dataBlogs[0].createdAt;
-    // console.log('timePost', timePost);
-
-
     // const isLogin = req.session.isLogin
-    // const username = req.session.user
+    const username = req.session.user
+    const idUser =  req.session.idUser
+
       res.render('index', {
         title: 'Home Page', 
         blogData: dataBlogs,
         isLogin: req.session.isLogin,
         user: req.session.user,
+        idUser: req.session.idUser,
         // getDistanceTime: getDistanceTime(createpost)
       })
 
-    // console.log('==========================================');
-    // console.log('isLogin at homepage: ', isLogin, username);
-    // console.log('==========================================');
+    console.log('==========================================');
+    console.log('isLogin at homepage: ', idUser, username);
+    console.log('==========================================');
   } catch (error) {
     console.log('==========================================');
     console.log('error from HOME PAGE: ', error);
@@ -176,6 +145,8 @@ async function login(req, res){
         // req.session.isLogin = true
         const username = req.session.user = dataUsers[0].name
         username
+        const idUser = req.session.idUser = dataUsers[0].id
+        idUser
         // req.session.user = dataUsers[0].name
         req.flash('succes', 'Login successful')
        
@@ -212,17 +183,24 @@ async function addContentBlog(req, res){
   try {
   const {title, content, technologies, start_date, end_date} = req.body
   const image = req.file.filename
-  const author = req.session.user
-
+  // const author = req.session.user
+  const idUser = req.session.idUser
 
   const date1 = new Date(start_date);
   const date2 = new Date(end_date);
   const time = date2 - date1;
   const days = Math.ceil(time / (1000 * 60 * 60 * 24));
-  let duration = days;
+  let durations = days;
 
-  await sequelize.query(`INSERT INTO blogs (author, title, content, technologies, start_date, end_date, image, duration, "createdAt", "updatedAt") VALUES ('${author}', '${title}', '${content}', '{${technologies}}', '${start_date}', '${end_date}', '${image}', '${duration}', NOW(), NOW())`)
-  
+  // await sequelize.query(`INSERT INTO projects (author, title, content, technologies, start_date, end_date, image, "createdAt", "updatedAt") VALUES ('${author}', '${title}', '${content}', '{${technologies}}', '${start_date}', '${end_date}', '${image}', NOW(), NOW())`)
+
+  // await sequelize.query(`INSERT INTO projects (author, title, content, technologies, start_date, end_date, image, duration, "createdAt", "updatedAt") 
+  // VALUES ('${idUser}', '${title}', '${content}', '{${technologies}}', '${start_date}', '${end_date}', '${image}', '${duration}', NOW(), NOW())`)
+
+
+  await sequelize.query(`INSERT INTO projects (author, title, content, technologies, start_date, end_date, image, durations,"createdAt", "updatedAt") 
+  VALUES (${idUser}, '${title}', '${content}', '{${technologies}}', '${start_date}', '${end_date}', '${image}', '${durations}', NOW(), NOW())`)
+
   res.redirect('/')
   } catch (error) {
     console.log('==========================================');
@@ -237,7 +215,10 @@ async function viewBlogDetail(req, res){
 
 
    const {id} = req.params
-   const query = `SELECT * FROM blogs WHERE id= ${id}`
+  //  const query = `SELECT * FROM projects WHERE id= ${id}`
+  const query = `SELECT projects.title, projects.content, projects.image, projects.technologies, projects.start_date, projects.end_date, users.name FROM projects LEFT JOIN users ON projects.author = users.id WHERE projects.id = ${id}`
+
+// const query = `SELECT projects.title, projects.content, projects.technologies, users.name FROM projects LEFT JOIN users ON projects.author = users.id WHERE projects.id = ${id}`
 
    const blog = await sequelize.query(query, {type: QueryTypes.SELECT})
 
@@ -254,7 +235,8 @@ async function viewBlogDetail(req, res){
     title: 'Blog Detail Page', 
     blog: data[0],
     isLogin: req.session.isLogin,
-    user: req.session.user
+    user: req.session.user,
+    idUser: req.session.idUser
    })
   } catch (error) {
     console.log('==========================================');
@@ -268,7 +250,7 @@ async function viewBlogEdit(req, res){
   }else{
     try {
       const {id} = req.params
-      const query = `SELECT * FROM blogs WHERE id = ${id}`
+      const query = `SELECT * FROM projects WHERE id = ${id}`
       
       const blog = await sequelize.query(query, {type: QueryTypes.SELECT})
       
@@ -296,8 +278,9 @@ async function blogEdit(req, res){
   try {
     const {id} = req.params
     const {title, start_date, end_date, technologies} = req.body
+    const image = req.file.filename
 
-    await sequelize.query(`UPDATE blogs SET title = '${title}', start_date = '${start_date}', end_date = '${end_date}', technologies = '{${technologies}}', WHERE id = '${id}'`)
+    await sequelize.query(`UPDATE projects SET title = '${title}', start_date = '${start_date}', end_date = '${end_date}', technologies = '{${technologies}}', image = '${image}'  WHERE id = '${id}'`)
 
     req.flash('success', 'Blog successfuly updated')
     res.redirect('/')
@@ -310,7 +293,7 @@ async function blogEdit(req, res){
 async function blogDelete(req, res){
   try {
     const {id} = req.params
-    await sequelize.query(`DELETE FROM blogs WHERE id= ${id}`)
+    await sequelize.query(`DELETE FROM projects WHERE id= ${id}`)
     req.flash('success', 'Blog succesfully removed')
     res.redirect('/')
   } catch (error) {
