@@ -44,6 +44,7 @@ app.set('views', path.join(__dirname, 'src/views'))
 // set serving static file
 app.use(express.static('src/assets'))
 app.use(express.static('src/uploads'))
+
 // Middleware
 app.use(express.urlencoded({ extended: false }))
 
@@ -76,13 +77,48 @@ async function home(req, res){
     const query = `SELECT * FROM blogs`
     let dataBlogs = await sequelize.query(query, {type: QueryTypes.SELECT})
 
+
+    // function getDistanceTime(createpost) {
+    //   let timeNow = new Date();
+    //   let timePost = createpost;
+
+    //   let distanceTime = timeNow - timePost;
+    
+    //   let distanceDay = Math.floor(distanceTime / (1000 * 3600 * 24));
+    //   let distanceHour = Math.floor(distanceTime / (1000 * 60 * 60));
+    //   let distanceMinute = Math.floor(distanceTime / (1000 * 60));
+    //   let distanceSecond = Math.floor(distanceTime / 1000);
+    
+    //   if (
+    //     distanceDay ||
+    //     distanceHour ||
+    //     distanceMinute ||
+    //     distanceSecond == false
+    //   ) {
+    //     return `... Ago`;
+    //   } else if (distanceDay > 0) {
+    //     return `${distanceDay} days ago`;
+    //   } else if (distanceHour > 0) {
+    //     return `${distanceHour} hour ago`;
+    //   } else if (distanceMinute > 0) {
+    //     return `${distanceMinute} minute ago`;
+    //   } else if (distanceSecond > 0) {
+    //     return `${distanceSecond} second ago`;
+    //   }
+    // }
+    
+    // let timePost = dataBlogs[0].createdAt;
+    // console.log('timePost', timePost);
+
+
     // const isLogin = req.session.isLogin
     // const username = req.session.user
       res.render('index', {
         title: 'Home Page', 
         blogData: dataBlogs,
         isLogin: req.session.isLogin,
-        user: req.session.user
+        user: req.session.user,
+        // getDistanceTime: getDistanceTime(createpost)
       })
 
     // console.log('==========================================');
@@ -176,6 +212,8 @@ async function addContentBlog(req, res){
   try {
   const {title, content, technologies, start_date, end_date} = req.body
   const image = req.file.filename
+  const author = req.session.user
+
 
   const date1 = new Date(start_date);
   const date2 = new Date(end_date);
@@ -183,8 +221,7 @@ async function addContentBlog(req, res){
   const days = Math.ceil(time / (1000 * 60 * 60 * 24));
   let duration = days;
 
-
-  await sequelize.query(`INSERT INTO blogs (title, content, technologies, start_date, end_date, image, duration, "createdAt", "updatedAt") VALUES ('${title}', '${content}', '{${technologies}}', '${start_date}', '${end_date}', '${image}', '${duration}', NOW(), NOW())`)
+  await sequelize.query(`INSERT INTO blogs (author, title, content, technologies, start_date, end_date, image, duration, "createdAt", "updatedAt") VALUES ('${author}', '${title}', '${content}', '{${technologies}}', '${start_date}', '${end_date}', '${image}', '${duration}', NOW(), NOW())`)
   
   res.redirect('/')
   } catch (error) {
@@ -208,10 +245,10 @@ async function viewBlogDetail(req, res){
     ...item,
    }))
 
-  //  console.log('==========================================');
-  //  console.log('data detail page: ', data);
-  //  console.log(`SELECT * FROM blogs WHERE id = ${id}`);
-  //  console.log('==========================================');
+   console.log('==========================================');
+   console.log('data detail page: ', data);
+   console.log(`SELECT * FROM blogs WHERE id = ${id}`);
+   console.log('==========================================');
    
    res.render('blog-detail', {
     title: 'Blog Detail Page', 
@@ -232,8 +269,9 @@ async function viewBlogEdit(req, res){
     try {
       const {id} = req.params
       const query = `SELECT * FROM blogs WHERE id = ${id}`
-  
+      
       const blog = await sequelize.query(query, {type: QueryTypes.SELECT})
+      
   
       const data = blog.map((item)=>({
         ...item
@@ -243,7 +281,8 @@ async function viewBlogEdit(req, res){
         title: 'Blog Edit', 
         editBlog: data[0],
         isLogin: req.session.isLogin,
-        user: req.session.user
+        user: req.session.user,
+       
     })
       
     } catch (error) {

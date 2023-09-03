@@ -66,16 +66,43 @@
           </div>
           <!-- Image -->
           <div class="mb-3" >
-            <label for="formFile" class="form-label">Image Before</label>
-            <div class="d-flex justify-content-md-start justify-content-center mb-2" style="height: 200px;">
-              <img src="/<%= editBlog.image %>" alt="" >
-            </div>
-            <input class="form-control" type="file" id="formFile">
+              <div class="row">
+                <div class="col">
+                  <label for="formFile" class="form-label">Image Before</label>
+                  <div class="d-flex justify-content-md-start justify-content-center mb-2" style="height: 200px;">
+                    <img src="/<%= editBlog.image %>" alt="" >
+                  </div>
+                </div>
+                <div class="col">
+                  <label for="imageInput" class="form-label">Image After</label>
+                  <div class="d-flex justify-content-md-start justify-content-center mb-2" style="height: 200px;">
+                    <img src="" alt="" id="imagePreview">
+                  </div>
+                </div>
+              </div>
+            
+            <input class="form-control" type="file" id="imageInput" onchange="previewImage()" >
           </div>
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>
     </form>
 
- 
+    <script>
+function previewImage() {
+  const fileInput = document.getElementById('imageInput');
+  const imagePreview = document.getElementById('imagePreview');
+
+  if (fileInput.files && fileInput.files[0]) {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      imagePreview.style.display = 'block';
+      imagePreview.src = e.target.result;
+    };
+
+    reader.readAsDataURL(fileInput.files[0]);
+  }
+}      
+    </script>
 <%- include('partials/footer') %>
