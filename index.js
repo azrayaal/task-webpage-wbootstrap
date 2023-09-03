@@ -128,9 +128,10 @@ async function register(req, res){
     await bcrypt.hash(password, saltRound, (err, hassPassword)=>{
       const query = `INSERT INTO users (name, email, password, "createdAt", "updatedAt") VALUES ('${name}', '${email}', '${hassPassword}', NOW(), NOW())`
       sequelize.query(query)
-      req.flash('succes', 'Register is successful')
+      req.flash('success', 'Successfully Register')
+      return res.redirect('/login')
     })
-    res.redirect('/login')
+    // res.redirect('/login')
  
   } catch (error) {
     console.log('==========================================');
@@ -151,11 +152,13 @@ async function login(req, res){
 // cek email
     if(!dataUsers.length){
       req.flash('danger', 'Email has not been registered!')
+      return res.redirect('/login')
     }
 // cek password
     await bcrypt.compare(password, dataUsers[0].password, (err, isMatch)=>{
       if(!isMatch){
         req.flash('danger', 'Sorry, your password is wrong')
+        return res.redirect('/login')
       } else {
         const isLogin = req.session.isLogin = true
         isLogin
@@ -165,7 +168,7 @@ async function login(req, res){
         const idUser = req.session.idUser = dataUsers[0].id
         idUser
         // req.session.user = dataUsers[0].name
-        req.flash('succes', 'Login successful')
+        req.flash('success', 'Login successful')
        
         // console.log('==========================================');
         // console.log('req.session.isLogin : ', isLogin, username);
@@ -217,8 +220,9 @@ async function addContentBlog(req, res){
 
   await sequelize.query(`INSERT INTO projects (author, title, content, technologies, start_date, end_date, image, durations, author_text, "createdAt", "updatedAt") 
   VALUES (${idUser}, '${title}', '${content}', '{${technologies}}', '${start_date}', '${end_date}', '${image}', '${durations}', '${author_text}', NOW(), NOW())`)
-
-  res.redirect('/')
+  req.flash('success', 'New Project has been added')
+  return res.redirect('/')
+  
   } catch (error) {
     console.log('==========================================');
     console.log('error from PROCESS ADD CONTENT: ', error);
@@ -233,7 +237,7 @@ async function viewBlogDetail(req, res){
 
    const {id} = req.params
   //  const query = `SELECT * FROM projects WHERE id= ${id}`
-  const query = `SELECT projects.title, projects.content, projects.image, projects.technologies, projects.start_date, projects.end_date, users.name FROM projects LEFT JOIN users ON projects.author = users.id WHERE projects.id = ${id}`
+  const query = `SELECT projects.title, projects.content, projects.image, projects.technologies, projects.durations, projects.start_date, projects.end_date, users.name FROM projects LEFT JOIN users ON projects.author = users.id WHERE projects.id = ${id}`
 
 // const query = `SELECT projects.title, projects.content, projects.technologies, users.name FROM projects LEFT JOIN users ON projects.author = users.id WHERE projects.id = ${id}`
 

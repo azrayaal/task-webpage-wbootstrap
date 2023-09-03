@@ -1,7 +1,11 @@
 
   <%- include('partials/header') %>
   <%- include('partials/navbar') %>
- 
+  <% if(messages.success) { %>
+    <div class="alert alert-success" role="alert">
+      <%= messages.success %>
+    </div>
+  <% } %>
   <!-- main -->
   <div class="px-3 px-md-0">
     <div class="container shadow my-5 text-center" style="background-color: #F4F3F3; border-radius: 25px; ">

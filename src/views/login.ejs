@@ -1,4 +1,13 @@
 <%- include('partials/header') %>
+<% if(messages.danger) { %>
+  <div class="alert alert-danger" role="alert">
+    <%= messages.danger %>
+  </div>
+<% } else if (messages.success) {%>
+  <div class="alert alert-success" role="alert">
+    <%= messages.success %>
+  </div>
+<% } %>
 
 <div class="container my-5">
   <div class="container bg-light p-4 rounded shadow">
