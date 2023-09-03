@@ -37,12 +37,6 @@
     <h1 class=" text-center">My Blog</h1>
     <div class="container text-center">
       <div class="row">
-        <% if (user) {%>
-        <!-- <h1>TEST USER</h1>
-          <% } else { %>
-        <h1>TEST TANPA</h1>
-          <% } %> -->
-          
         <% blogData.forEach((i) => { %>
           <div class="col-md-4 col-12 my-5">
             <div class="card rounded shadow" style="background-color: #F4F3F3">
@@ -67,7 +61,7 @@
                       <% }  %>
                     <% }); %>
                   </div>
-                  <p class="fs-6 fw-normal ">...ago</p>
+                  <p class="fs-6 fw-normal "> <%= i.author_text %> </p>
                 </div>
                 <div class="d-grid gap1">
                   <% if(isLogin) { %>

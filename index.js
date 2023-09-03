@@ -74,25 +74,42 @@ app.post('/contact', sendContact)
 ///////////////  HOME  /////////////// 
 async function home(req, res){ 
   try {
-    const query = `SELECT * FROM projects`
-    let dataBlogs = await sequelize.query(query, {type: QueryTypes.SELECT})
-
-    // const isLogin = req.session.isLogin
-    const username = req.session.user
-    const idUser =  req.session.idUser
+    if(!req.session.isLogin){
+      const query = `SELECT * FROM projects`
+      let dataProjects = await sequelize.query(query, {type: QueryTypes.SELECT})
 
       res.render('index', {
         title: 'Home Page', 
-        blogData: dataBlogs,
+        blogData: dataProjects,
         isLogin: req.session.isLogin,
         user: req.session.user,
         idUser: req.session.idUser,
-        // getDistanceTime: getDistanceTime(createpost)
       })
-
-    console.log('==========================================');
-    console.log('isLogin at homepage: ', idUser, username);
-    console.log('==========================================');
+      console.log('==========================================');
+      console.log('dataProjects at homepage: ', dataProjects);
+      console.log('==========================================');
+    } else {
+    const query = `SELECT * FROM projects`
+    let dataProjects = await sequelize.query(query, {type: QueryTypes.SELECT})
+    /////////// debuging ///////////
+    // const isLogin = req.session.isLogin
+    // const user = req.session.user
+    // const idUser =  req.session.idUser
+    const idUser = req.session.idUser;
+    const matchProject = dataProjects.filter(blog => blog.author === idUser);
+    // matchProject author === idUser
+      res.render('index', {
+        title: 'Home Page', 
+        blogData: matchProject,
+        isLogin: req.session.isLogin,
+        user: req.session.user,
+        idUser: req.session.idUser,
+      })
+    }
+    // console.log('==========================================');
+    // console.log('author and idUser at homepage: ', author, idUser);
+    // console.log('filteredBlogs at homepage: ', matchProject);
+    // console.log('==========================================');
   } catch (error) {
     console.log('==========================================');
     console.log('error from HOME PAGE: ', error);
@@ -183,7 +200,7 @@ async function addContentBlog(req, res){
   try {
   const {title, content, technologies, start_date, end_date} = req.body
   const image = req.file.filename
-  // const author = req.session.user
+  const author_text = req.session.user
   const idUser = req.session.idUser
 
   const date1 = new Date(start_date);
@@ -198,8 +215,8 @@ async function addContentBlog(req, res){
   // VALUES ('${idUser}', '${title}', '${content}', '{${technologies}}', '${start_date}', '${end_date}', '${image}', '${duration}', NOW(), NOW())`)
 
 
-  await sequelize.query(`INSERT INTO projects (author, title, content, technologies, start_date, end_date, image, durations,"createdAt", "updatedAt") 
-  VALUES (${idUser}, '${title}', '${content}', '{${technologies}}', '${start_date}', '${end_date}', '${image}', '${durations}', NOW(), NOW())`)
+  await sequelize.query(`INSERT INTO projects (author, title, content, technologies, start_date, end_date, image, durations, author_text, "createdAt", "updatedAt") 
+  VALUES (${idUser}, '${title}', '${content}', '{${technologies}}', '${start_date}', '${end_date}', '${image}', '${durations}', '${author_text}', NOW(), NOW())`)
 
   res.redirect('/')
   } catch (error) {
