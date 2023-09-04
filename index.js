@@ -75,7 +75,7 @@ app.post('/contact', sendContact)
 async function home(req, res){ 
   try {
     if(!req.session.isLogin){
-      const query = `SELECT * FROM projects`
+      const query = `SELECT * FROM projects `
       let dataProjects = await sequelize.query(query, {type: QueryTypes.SELECT})
 
       res.render('index', {
@@ -85,9 +85,9 @@ async function home(req, res){
         user: req.session.user,
         idUser: req.session.idUser,
       })
-      console.log('==========================================');
-      console.log('dataProjects at homepage: ', dataProjects);
-      console.log('==========================================');
+      // console.log('==========================================');
+      // console.log('dataProjects at homepage: ', dataProjects);
+      // console.log('==========================================');
     } else {
     const query = `SELECT * FROM projects`
     let dataProjects = await sequelize.query(query, {type: QueryTypes.SELECT})
@@ -116,6 +116,10 @@ async function home(req, res){
     console.log('==========================================');
   }
 }
+
+
+
+
 ///////////////  REGISTER  ///////////////
 function viewRegister(req, res){
   res.render('register', {title: 'Register Page' })
@@ -149,7 +153,7 @@ async function login(req, res){
     const query = `SELECT * FROM Users WHERE email = '${email}'`
 
     const dataUsers = await sequelize.query(query, {type: QueryTypes.SELECT})
-// cek email
+    // cek email
     if(!dataUsers.length){
       req.flash('danger', 'Email has not been registered!')
       return res.redirect('/login')
@@ -187,6 +191,10 @@ function logOut(req, res){
   req.session.destroy()
   res.redirect('/login')
 }
+
+
+
+
 ///////////////  BLOG  ///////////////
 function viewFormBlog(req, res){
   if(!req.session.isLogin){
@@ -233,7 +241,6 @@ async function viewBlogDetail(req, res){
   try {
     //////////////////////// DATE POST //////////////
     /////////////////////////////////////////////////
-
 
    const {id} = req.params
   //  const query = `SELECT * FROM projects WHERE id= ${id}`
